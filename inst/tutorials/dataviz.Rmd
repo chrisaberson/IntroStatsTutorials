@@ -1,0 +1,270 @@
+---
+title: "Data Visualization Tutorial"
+author: "Chris Aberson"
+tutorial:
+  id:"Data.Visualization"
+output: learnr::tutorial
+runtime: shiny_prerendered
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(learnr)
+hint_text <- function(text, text_color = "#E69F00"){
+  hint <- paste("<font color='", text_color, "'>", text, "</font>", sep = "")
+  return(hint)
+}
+
+library(IntroStatsTutorials)
+
+```
+
+# Data Visualization
+
+## Overview
+
+This tutorial focuses on data visualization (i.e., graphing) The tutorial includes a combination of videos, text, knowledge check quizzes, and exercises. 
+
+The PowerPoint slides for the presentation in the videos are on Canvas if you want a copy. For those not enrolled in my class, these files can be found here: https://osf.io/9tgxm/ 
+
+The videos (as well as others) can also be found on my YouTube channel https://www.youtube.com/channel/UC5kDZTyHZlgSgSEa3YQXOig 
+
+## Packages 
+
+This tutorial uses the following packages:
+
+* `ggplot2` for fancy graphs
+* `learnr` and `shiny` and `rmarkdown` for aspects of the tutorial
+
+These packages should be automatically loaded within this tutorial (but you already installed `learnr` if you are here). If you are working outside of this tutorial (e.g., working with the data files and trying analysis in R) then you need to make sure that the necessary packages are installed on your computer.
+
+## Data
+
+All data files exist within this package, so we can simply call them without reference to a file location. 
+
+*Fall18* These data represent 115 responses to the class data questionnaire. These included your responses and those from several previous semesters. 
+
+
+
+*med* is a version of the same data that includes some variables with missing values to allow for demonstration of some additional functions in `lavaan`. 
+
+*denial* is the datafile used in exercises. These data examine relationships between climate denial and a variety of other beliefs. 
+
+Jylhä, K. M., & Hellmer, K. (in press). Right-wing populism and climate change denial: The roles of exclusionary and anti-egalitarian preferences, conservative ideology, and antiestablishment attitudes. **Analyses of Social Issues and Public Policy**. https://doi.org/10.1111/asap.12203
+
+The datafile includes the variables **CCD** (Climate Change denial), **ANTIESTABL** (Anti Establishment Beliefs), **EXCL_ANTIEG** (anti egalitarian preferences), **TRADVALUE** (traditional values), **OPENNESS** (openness to new experiences), **PSEUDOSCI** (pseudoscience beliefs), and **AGREEABL** (agreeableness), **AGE** (age in years), **Gender** (three categories), **Education** (5 categories, and **ed** (education split into college grads vs. non grads)
+
+All files are on the class' Google Share drive if you want to work with them outside of the tutorial. They are already loaded in this tutorial so you will not need to load the data as you work. (Note: If you are not in my class, these files can be found here: https://osf.io/9tgxm/).
+
+Videos generally range from about 10 to 15 minutes long (there are five of them).
+
+## Video 1 
+
+![Video 1: Introduction](https://youtu.be/Eov3a3eQrRo)
+
+## Quiz 1 
+
+![](images/quiz1.1.png)
+![](images/quiz1.2.png)
+
+```{r quiz1}
+learnr::quiz(
+  learnr::question("The graph titled 'do you intend to vote' shows which of the following?",
+    learnr::answer("Yes is the most common answer", correct = TRUE),
+    learnr::answer("No is the most common answer"),
+    learnr::answer("Maybe is the most common answer"),
+    learnr::answer("None of the above"),
+    correct = "Correct! Yes is the most common response with 85%",
+    incorrect = "Sorry, that's incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("The graph titled 'On a scale of 1 to 100 ...' shows ... ",
+    learnr::answer("Most answers were between 70 and 90", correct = TRUE),
+    learnr::answer("Most answers were between 50 and 100"),
+    learnr::answer("Most people are not certain they will vote"),
+    learnr::answer("None of the above"),
+    correct = "Correct. The graph show that most (i.e., more than half at least) of the scores fall between 70 and 90",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that's incorrect. Try again.",
+    allow_retry = T
+  )
+)
+
+``` 
+
+## Video 2 Graphs for Nominal and Ordinal Variables
+
+![](https://youtu.be/4II2YkphcHQ)
+
+
+
+
+## Levels of measurement
+
+Recall, from an earlier module that we generally deal with three basic types of variables, nominal, ordinal, and interval/ratio (technically, this is four but the interval/ratio distinction is not relevant to the use of different approaches).
+
+Nominal and ordinal variables are more broadly termed "categorical" variables as data represent categories. We often assign numbers to categories (e.g., 0 = No and 1 = Yes) but those numbers do not allow for mathematical operations.
+
+Nominal variables are those where categories reflect only names. Those values can be arranged in any order without loss of meaning. For example, a variable that addressed ethnic background with responses of 1 = African American, 2 = Asian American, 3 = Latino/Hispanic, 4 = White, 5 = Native American, and 6 = Multiracial, could be reorganized to 1 = Latino/Hispanic, 2 = African American, 3 = Asian American, 4 = Native American, 5 = White, and 6 = Multiracial, without losing meaning. 
+
+Ordinal variables are those where the order matter. For example, 1 = Low, 2 = Medium, 3 = High cannot be reorganized in any manner because those categories represent a specific order. 
+
+Interval/ratio variables are those where the numbers simply represent numbers on a continuum from low to high. These are often called "continuous" variables. One example of this might be SAT scores range from 400 to 1600. Each individual score doesn't represent a different category, just a higher or lower value. 
+
+Quiz Placeholder - for our class data set, please identify the type of variable. 
+
+## Code: Nominal/Ordinal Graphs
+
+The code below uses the *denial* data to demonstrate how to run analyses for making bar graphs. See below the code for explanations. 
+
+```{r echo = T, eval = F}
+counts<-table(denial$Education)
+``` 
+
+The table command tells us how many people are in each category. I captured this information for graphing with the part that reads counts<-. As a reminder anything to left of the <- symbol is called an "object" - you can name it whatever you want. We execute the table command on the dataset denial and the variable Education. Note that many commands use the general dataset$variable format. 
+
+```{r echo = T, eval = F}
+barplot(counts)
+``` 
+
+This line graphs the object (counts) that has the information about the different categories. 
+
+```{r echo = T, eval = F}
+barplot(counts, main="Education Level of 1587 particpants", xlab="Education Category")
+``` 
+
+This code gives the same graph as the one earlier but it adds a title (main) and a label on the x axis (xlab). We could also add a label to the y-axis using ylab. These commands work for most of the graphs we see throughout. 
+
+
+```{r ex1, exercise = TRUE, exercise.lines = 2}
+counts<-table(denial$ed)
+barplot(counts, main="Education Level of 1587 particpants", xlab="Education Category")
+```
+
+### Exercise
+
+Using the denial data create a bar graph for the variable **Gender**. Try to write the code yourself. If you get stuck, you can use the "solution" button. 
+
+
+
+```{r ex2, exercise = TRUE, exercise.lines = 2}
+
+```
+
+```{r ex2-solution}
+counts<-table(denial$Gender)
+barplot(counts)
+```
+
+## Video 3 Graphs for Interval/Ratio Variables
+
+
+## Quiz 3
+
+```{r quiz3}
+learnr::quiz(
+  learnr::question("What technique discussed in the videos would you use to graph a nominal or ordinal variable?",
+    learnr::answer("Bar graph a.k.a. barplot", correct = TRUE),
+    learnr::answer("Histogram"),
+    learnr::answer("Density Plot"),
+    learnr::answer("Density Plot or Histogram"),
+    learnr::answer("None of the above"),
+    correct = "Correct! Bar graphs show the number of people in each category, so that's perfect for categorical variables.",
+    incorrect = "Sorry, that's incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+learnr::question("What technique discussed in the videos would you use to graph an interval or ratio variable?",
+    learnr::answer("Bar graph a.k.a. barplot"),
+    learnr::answer("Histogram"),
+    learnr::answer("Density Plot"),
+    learnr::answer("Density Plot or Histogram", correct = TRUE),
+    learnr::answer("None of the above"),
+    correct = "Correct! Histograms and density plots both show how scores distribute across continuous variables.",
+    incorrect = "Sorry, that's incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+
+``` 
+
+## Code: Interval/Ratio Graphs
+
+The code below uses the *denial* data to demonstrate how to run analyses for making bar graphs. See below the code for explanations. 
+
+###Exercises (after )
+
+The following exercise uses the class data (Fall18). Note that for several questions, I'm not telling you what graph to make. That's for you to decide based on they type of variable and how that matches up to the different approaches we used.
+
+## Interactive examples
+
+```{r, echo=FALSE}
+sliderInput("bins", "Number of bins:", min = 1, max = 50, value = 30)
+plotOutput("distPlot")
+```
+
+```{r, context="server"}
+output$distPlot <- renderPlot({
+  x <- faithful[, 2]  # Old Faithful Geyser data
+  bins <- seq(min(x), max(x), length.out = input$bins + 1)
+  hist(x, breaks = bins, col = 'darkgray', border = 'white')
+})
+```
+## Video 4 Comparing Groups Using Graphs
+
+## Code for comparing groups
+
+
+
+
+
+
+##Bonus analyses
+
+In this section we examine a few different approaches. 
+
+1. Getting %s for your bar graphs
+
+2. Violin plots
+
+Violin plots are actually density plots. That are mirrored and on their sides.
+
+```{r ex6, exercise = TRUE, exercise.lines = 2}
+  ggplot(denial,aes(x=Education,y=PSEUDOSCI, fill=Education)) +
+  geom_violin()
+```
+
+
+We can clean up the graph a little by adding more code. 
+
+```{r ex7, exercise = TRUE, exercise.lines = 5}
+  ggplot(denial,aes(x=Education,y=PSEUDOSCI, fill=Education)) +
+  geom_violin() +
+  ylab("Psuedo Science Beliefs") +
+  xlab("Education")+
+  theme(axis.text.x=element_blank())
+```
+
+
+## Equation Examples
+
+$\huge \overline{x}$
+
+$\huge s_{\bar{x_1}-\bar{x_2}} =\sqrt{s_{x_1}^2+s_{x_2}^2 - 2rs_{x_1}s_{x_2}}$
+
+$\huge cov_{xy} = \frac{(x-\bar{x})(y-\bar{y})}{n-1}$
+
+$\huge r = \frac{cov_{xy}}{s_xs_y}$
+
+$\huge z = \frac{\bar{x} - \mu_0}{\sigma / \sqrt{n}}$
+
+## Shiny test
+
+```{r miniUI}
+knitr::include_app('https://yihui.shinyapps.io/miniUI/', height = '600px')
+```
+
