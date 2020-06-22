@@ -3,7 +3,7 @@ To install the package, use the following code.
     install.packages("devtools")  
     install.packages("learnr")  
     library(devtools)  
-    install_github("chrisaberson/learnr-workshop")  
+    install_github("chrisaberson/IntroStatsTutorials")  
 
 To run a tutorial, use this code..
 
