@@ -4,7 +4,7 @@
 #'
 #' This package supports online teaching for teaching introductory stats
 #'
-#' @import ggplot2 car lsr apaTables BayesFactor tidyverse
+#' @import ggplot2 lsr
 #' @docType package
 #' @name IntroTutorials
 #'

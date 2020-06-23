@@ -1,16 +1,17 @@
 Package: IntroStatsTutorials
-Title: What the Package Does (One Line, Title Case)
+Title: Tutorials for Intro Statistics
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Chris",
+           family = "Aberson",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to
-    pick a license
+           email = "cla18@humboldt.edu",
+           comment = c(ORCID = "orcid.org/0000-0003-3481-7177"))
+Description: Intro Statistics Tutorials.
+License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
+Imports: 
+    car, ggplot2, lsr
