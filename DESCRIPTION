@@ -8,7 +8,7 @@ Authors@R:
            email = "cla18@humboldt.edu",
            comment = c(ORCID = "orcid.org/0000-0003-3481-7177"))
 Description: Intro Statistics Tutorials.
-License: GPL (>= 2)
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
