@@ -7,6 +7,7 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 library(learnr)
 library(ggplot2)
+library(IntroStatsTutorials)
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
@@ -37,7 +38,7 @@ All data files exist within this package, so we can simply call them without ref
 
 *denial* is the datafile used in exercises. These data examine relationships between climate denial and a variety of other beliefs. 
 
-Jylhä, K. M., & Hellmer, K. (in press). Right-wing populism and climate change denial: The roles of exclusionary and anti-egalitarian preferences, conservative ideology, and antiestablishment attitudes. **Analyses of Social Issues and Public Policy**. https://doi.org/10.1111/asap.12203
+Jylhä, K. M., & Hellmer, K. (in press). Right-wing populism and climate change denial: The roles of exclusionary and anti-egalitarian preferences, conservative ideology, and antiestablishment attitudes. *Analyses of Social Issues and Public Policy*. https://doi.org/10.1111/asap.12203
 
 The datafile includes the variables **CCD** (Climate Change denial), **ANTIESTABL** (Anti Establishment Beliefs), **EXCL_ANTIEG** (anti egalitarian preferences), **TRADVALUE** (traditional values), **OPENNESS** (openness to new experiences), **PSEUDOSCI** (pseudoscience beliefs), and **AGREEABL** (agreeableness), **AGE** (age in years), **Gender** (three categories), **Education** (5 categories, and **ed** (education split into college grads vs. non grads)
 
@@ -155,7 +156,7 @@ output$distPlot <- renderPlot({
 })
 ```
 
-##Bonus analyses
+## Graphing using ggplot2
 
 In this section we examine a few different approaches. 
 
