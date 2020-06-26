@@ -20,3 +20,5 @@ To run a tutorial, use this code..
     run_tutorial("Dataviz", package = "IntroStatsTutorials")
 
 After you run this code, the tutorial will open, either in a separate RStudio standalone window or in a tab on your browser.
+
+PPT slides are in the folder ppt. The markdown file for the tutorial is in inst/tutorials/dataviz (dataviz.RMD). This repository demonstrates the directory structure for a package (you don't need the PPT folder). 
