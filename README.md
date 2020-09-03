@@ -1,24 +1,23 @@
 To install the package, use the following code.
 
-    install.packages("devtools")  
-    install.packages("learnr")  
+    install.packages("learnr","car","lsr","ggplot2")
     library(devtools)  
     install_github("chrisaberson/IntroStatsTutorials")  
 
-You will likely (if you are new to R), be directed to download RTools. Go to
-<a href="https://cran.r-project.org/bin/windows/Rtools/" class="uri">https://cran.r-project.org/bin/windows/Rtools/</a>
-and download the most recent version. If you are using a Mac, you will need to use a current operating system. 
-
-You may also be prompted to update packages. Choose all (1), if prompted. 
-
-This process may take several minutes. 
-
-To run a tutorial, use this code..
+To run a tutorial, use this code.
 
     library(learnr)  
-    library(IntroStatsTutorials)
-    run_tutorial("Dataviz", package = "IntroStatsTutorials")
+    run_tutorial("terminology", package = "IntroStatsTutorials")
+    run_tutorial("dataviz", package = "IntroStatsTutorials")
+    run_tutorial("ct_dispersion", package = "IntroStatsTutorials")
+    run_tutorial("normaldist", package = "IntroStatsTutorials")
+    run_tutorial("correlation", package = "IntroStatsTutorials")
 
-After you run this code, the tutorial will open, either in a separate RStudio standalone window or in a tab on your browser.
+After you run this code, the tutorial will open in a tab on your
+browser.
 
-PPT slides are in the folder ppt. The markdown file for the tutorial is in inst/tutorials/dataviz (dataviz.RMD). This repository demonstrates the directory structure for a package (you don't need the PPT folder). 
+If this doesn’t work, you likely need to update your rtools. Go to
+<a href="https://cran.r-project.org/bin/windows/Rtools/" class="uri">https://cran.r-project.org/bin/windows/Rtools/</a>
+and download the most recent version (for your platform (Note: Rtools is
+just for Windows, I am looking into other platforms). You may also, on
+Mac OS have to install the backports package.
