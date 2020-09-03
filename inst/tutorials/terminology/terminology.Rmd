@@ -1,0 +1,238 @@
+---
+title: "Terminology and Definitions"
+output: learnr::tutorial
+runtime: shiny_prerendered
+description: >
+  Introduction to Statistics, Basic Terms, and Definitions
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(knitr)
+library(ggplot2)
+library(IntroStatsTutorials)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Terminology
+
+## Overview
+
+This tutorial focuses on basic terminology and serves as an introduciton to the class. The tutorial includes a combination of videos, text, and knowledge check quizzes. As we move to more complex topics, tutorials will also included oppportunities to run R code. 
+
+The PowerPoint slides for the presentation in the videos are on Canvas if you want a standalone copy. 
+
+The videos (as well as others) can also be found on my YouTube channel https://www.youtube.com/channel/UC5kDZTyHZlgSgSEa3YQXOig 
+
+For several tutorials in this module, we will use a data set called *denial*, this datafile includes variables that examine relationships between climate denial and a variety of other beliefs. The *denial* data come from:
+
+Jylhä, K. M., & Hellmer, K. (in press). Right-wing populism and climate change denial: The roles of exclusionary and anti-egalitarian preferences, conservative ideology, and antiestablishment attitudes. *Analyses of Social Issues and Public Policy*. https://doi.org/10.1111/asap.12203
+
+We won't analyze any data in this tutorial but will in both the Data Visualization and the Central Tendency and Dispersion tutorials. 
+
+### Learning Objectives
+
+List different types of variables
+
+Describe differences between variable types
+
+Apply the different variable definitions to novel variables (i.e., new ones you haven't seen before)
+
+Distinguish between variable types, population vs. sample, and descriptive vs. inferential statistic
+
+
+## Video 1 Introduction to Statistics and to Psych 241
+
+![Video 1: Introduction](https://youtu.be/Z9xzsr--4-0)
+
+## Quiz 1 
+
+```{r quiz1, ECHO=F}
+learnr::quiz(
+  learnr::question("The software program(s) used in the class are ... ",
+    learnr::answer("R and R Studio", correct = TRUE),
+    learnr::answer("MS Excel"),
+    learnr::answer("SPSS"),
+    learnr::answer("We do not use software"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("The cost of the course software is ... ",
+    learnr::answer("Free", correct = TRUE),
+    learnr::answer("We do not use software"),
+    learnr::answer("$50 per semester"),
+    learnr::answer("$100 per semester"),
+    correct = "Correct.",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  ),
+  learnr::question("The cost of the course textbook is ... ",
+    learnr::answer("Free", correct = TRUE),
+    learnr::answer("There is no textbook"),
+    learnr::answer("$100"),
+    learnr::answer("$175"),
+    correct = "Correct.",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  )
+)
+
+``` 
+
+## Video 2 Definitions
+
+![](https://youtu.be/aj8mmbM43T4)
+
+## Quiz 2 
+
+```{r quiz2, ECHO=F}
+learnr::quiz(
+  learnr::question("What is the name for something that can take on different values?",
+    learnr::answer("Variable", correct = TRUE),
+    learnr::answer("Constant"),
+    learnr::answer("Population"),
+    learnr::answer("Sample"),
+    correct = "Correct! Variables take on different values.",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("Because it is usually not possible to measure everyone (e.g., measure all U.S. residents), researchers often collect data from _____________ instead of from _____________.   ",
+    learnr::answer("Samples, Populations", correct = TRUE),
+    learnr::answer("Populatons, Samples"),
+    learnr::answer("Variables, Data"),
+    learnr::answer("Descriptive, Inferential"),
+    correct = "Correct! Samples are a subset of a population.",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("Statistics that are used to draw conclusions about populations based on samples are called...",
+    learnr::answer("Inferential Statistics", correct = TRUE),
+    learnr::answer("Descriptive Statistics"),
+    learnr::answer("Population Statistics"),
+    learnr::answer("Sample Statistics"),
+    correct = "Correct! Inferential statistics allow us to draw inferences about populations based on samples.",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+
+``` 
+
+
+## Video 3: Types of Variables
+
+![](https://youtu.be/oIdrOOJbXB4)
+
+## Quiz 3
+
+The dataset called *denial* includes variable called **Gender** and **CCD** (Climate change denial). The gender variables includes 3 categories (1=Male, 2 = Female, 3 = Transgender) the climate change denial variable is the sum of a series of questions measured on scale that ranges from 1 to 5 (Where higher scores indicate more endorsement of climate change denial).
+
+
+```{r quiz3, ECHO=F}
+learnr::quiz(
+  learnr::question("What type of variable is **Gender**",
+    learnr::answer("Ordinal"),
+    learnr::answer("Interval/Ratio"),
+    learnr::answer("Nominal", correct = TRUE),
+    learnr::answer("None of the above"),
+    correct = "Correct! In this case the numbers simply represent a category name that could be placed in any order.",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("What type of variable is **CCD**",
+    learnr::answer("Ordinal"),
+    learnr::answer("Interval/Ratio", correct = TRUE),
+    learnr::answer("Nominal"),
+    learnr::answer("None of the above"),
+    correct = "Correct! In this case the numbers a scale where higher means more and lower means less and well as having mathematical properties.",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("Interval/Ratio variables are also called ... ",
+    learnr::answer("Continuous or numeric variables", correct = TRUE),
+    learnr::answer("Categorical variables"),
+    learnr::answer("Count variables"),
+    learnr::answer("None of the above"),
+    correct = "Correct. R calls Interval/Ratio variables 'numeric' (and sometimes 'integer'). Other common names are continuous or quantitative variables",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  )
+)
+
+``` 
+
+## Video 4: A Little Bit of Math
+![](https://youtu.be/nBKnzqAKvZQ)
+## Quiz 4
+```{r ECHO=FALSE}
+x<-c(5,7,9,4)
+y<-c(6,1,0,3)
+xy<-cbind(x,y)
+knitr::kable(xy)
+```
+
+```{r quiz4, ECHO=F}
+learnr::quiz(
+    learnr::question("For the small dataset above, what is the $\\Sigma{y}$",
+    learnr::answer("25"),
+    learnr::answer("6"),
+    learnr::answer("10", correct = TRUE),
+    learnr::answer("11"),
+    correct = "Correct! 6+1+0+3=10",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("For the small dataset above, what is the $\\Sigma{xy}$",
+    learnr::answer("250"),
+    learnr::answer("25"),
+    learnr::answer("50", correct = TRUE),
+    learnr::answer("10"),
+    correct = "Correct! (5*6)+(7*1)+(9*0)+(4*3)=49. Remember, multiply before you add!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+    learnr::question("For the small dataset above, what is the $\\Sigma{y^2}$",
+    learnr::answer("100"),
+    learnr::answer("25"),
+    learnr::answer("46", correct = TRUE),
+    learnr::answer("10"),
+    correct = "Correct! (6*6)+(1*1)+(0*0)+(3*3)=36+1+0+9=46. Remember, do the exponent (each number multiplied by itself) before you add!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("What is 4.46 rounded to 1 decimal?",
+    learnr::answer("4"),
+    learnr::answer("5"),
+    learnr::answer("4.5", correct = TRUE),
+    learnr::answer("4.4"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+
+``` 
+
+## 
+
+Congratulations! You've reached the end of the tutorial. Here is what you need to do to obtain credit. Take the completion token below and copy it. Open Canvas as go to the assignment called Terminology tutorial. Enter your token!
+
+
+```{r echo=F}
+stringi::stri_rand_strings(1, 5, pattern = "[A-Za-z0-9]")
+```
+

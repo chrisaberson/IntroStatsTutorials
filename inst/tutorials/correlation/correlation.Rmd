@@ -1,0 +1,250 @@
+---
+title: "Correlation"
+output: learnr::tutorial
+runtime: shiny_prerendered
+description: >
+  Correlation
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(learnr)
+library(knitr)
+library(IntroStatsTutorials)
+```
+
+# Normal Distribution and Probabilities 
+
+## Overview
+
+This tutorial focuses on the normal distribution, z-scores, areas under the distribution curve, and probability basics. 
+
+The PowerPoint slides for the presentation in the videos are on Canvas if you want a copy.
+
+The videos (as well as others) can also be found on my YouTube channel https://www.youtube.com/channel/UC5kDZTyHZlgSgSEa3YQXOig 
+
+### Learning Objectives
+
+Learning Objectives:
+
+Compute the Pearson Correlation Coefficient
+
+Interpret scatterplots
+
+Use R to obtain correlations
+
+Describe bivariate relationships in plain English
+
+## Packages 
+
+This tutorial uses the following packages:
+
+* `learnr` and `shiny` and `rmarkdown` for aspects of the tutorial
+
+These packages should be automatically loaded within this tutorial (but you already installed `learnr` if you are here). If you are working outside of this tutorial (e.g., working with the data files and trying analysis in R) then you need to make sure that the necessary packages are installed on your computer.
+
+## Data
+
+This tutorial uses data from a study (conducted by Danielle and I) examining how contact experiences with African Americans and feelings of threat relate to support for Black Lives Matter. The dataset is called *BLM* and contains variables measuring positive contact experiences **PosCon**, negative contact experiences **NegCon**, realistic threat **Real**, symbolic threat **Symb** and support for Black Lives Matter **blm**.
+
+## Video 1 Introduction the Correlation
+
+![Video 1: Introduction](https://youtu.be/F6o5l0U3UYI)
+
+## Quiz 1 
+
+```{r quiz1}
+learnr::quiz(
+  learnr::question("Correlations ...",
+    learnr::answer("Describe the relationship between two variables", correct = TRUE),
+    learnr::answer("Describe the dispersion of variables"),
+    learnr::answer("Describe central tendency of variables"),
+    learnr::answer("None of the above"),
+    correct = "Correct! Correlations are descriptive statistics that descrive how two variable relate to each other",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("Correlations are our first",
+    learnr::answer("Bivariate statistic", correct = TRUE),
+    learnr::answer("Univariate statistic"),
+    learnr::answer("Multivariate statistic"),
+    learnr::answer("None of the above"),
+    correct = "Correct. Correlations describe two variables (bivariate)",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  )
+)
+
+``` 
+
+## Video 2 Types of Relationships 
+
+![](https://youtu.be/F6o5l0U3UYI)
+
+## Quiz 2
+
+```{r quiz2}
+learnr::quiz(
+  learnr::question("As depression rises, so does anxiety. This describes what type of relationship?",
+    learnr::answer("Positive relationship", correct = TRUE),
+    learnr::answer("Negative relationship"),
+    learnr::answer("No relationship"),
+    learnr::answer("None of the above"),
+    correct = "Correct! Yes, axiety rises with depression, so this would be a positive relationship",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("Depression symptoms appear just as common for older adults, younger adults, and the middle aged. This would be an example of ...",
+    learnr::answer("Positive relationship"),
+    learnr::answer("Negative relationship"),
+    learnr::answer("No relationship", correct = TRUE),
+    learnr::answer("None of the above"),
+    correct = "Correct. Correlations describe two variables (bivariate)",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  )
+)
+
+``` 
+
+## Video 3 Types of Relationships 
+
+![](https://youtu.be/F6o5l0U3UYI)
+
+## Quiz Types of Relationships 
+
+```{r quiz3}
+learnr::quiz(
+  learnr::question("Which famous statistician was a racist?",
+    learnr::answer("Karl Pearson", correct = TRUE),
+    learnr::answer("Charles Spearman"),
+    learnr::answer("Stephen Point-Biserial"),
+    learnr::answer("None of the above"),
+    correct = "Correct! Much like Elvis and John Wayne, Pearson was a straight up racist",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("Pearson's Correlation Coefficient is used with",
+    learnr::answer("Interval/Ratio variable", correct = TRUE),
+    learnr::answer("Ordinal variables"),
+    learnr::answer("Any variable you want, unlike Pearson, the statistic does not discriminate"),
+    learnr::answer("Nominal variables"),
+    correct = "Correct. Pearson's correlation coefficient is for interval/ratio variables",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  )
+)
+
+``` 
+
+## Video 4 Calculations
+
+![](https://youtu.be/F6o5l0U3UYI)
+
+## Quiz
+
+$\huge cov_{xy}=\frac{\Sigma(x-\bar{x})(y-\bar{y})}{n-1}$  
+
+$\huge r = \frac{cov_{xy}}{s_xs_y}$
+
+
+```{r echo=F}
+x<-c(4,6,8,10)
+y<-c(8,4,2,6)
+ex1<-cbind(x,y)
+knitr::kable(ex1)
+```
+
+For the data above, $\bar{x}$=7 and $\bar{x}$=5, $s_x$=2.58 and $s_y$=2.58. 
+
+```{r quiz4}
+learnr::quiz(
+  learnr::question("What is the covariance? ",
+    learnr::answer("-2.67", correct = TRUE),
+    learnr::answer("2.67"),
+    learnr::answer("0"),
+    learnr::answer("None of the above"),
+    correct = "Correct! Sum of (4*8)+(6*4)+(8*2)+(10*6) / 4-1 = -2.67",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("What is the correlation",
+    learnr::answer("-.40", correct = TRUE),
+    learnr::answer(".40"),
+    learnr::answer("-2.67"),
+    learnr::answer("None of the above"),
+    correct = "Correct. -2.67 / (2.58*2.58)=-.40",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  )
+)
+
+``` 
+## Video Correlations in R
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The cov command below gets the covariance between Positive Contact and BLM support.
+```{r ECHO=T, EVAL=T}
+cov(BLM$PosCon,BLM$blm)
+```
+
+The cor command below gets the correlation between Positive Contact and BLM support.
+```{r ECHO=T, EVAL=T}
+cor(BLM$PosCon,BLM$blm)
+```
+
+We could also do with the cor.test command below. More on all that extra information later in the semester. 
+```{r ECHO=T, EVAL=T}
+cor.test(BLM$PosCon,BLM$blm)
+```
+
+Scatterplots follow the same format. 
+
+```{r ECHO=T, EVAL=T}
+plot(BLM$PosCon,BLM$blm)
+```
+
+### Exercise
+
+Obtain the covariance, correlation, and make a scatterplot representing the relationship between negative contact and support for BLM.
+
+```{r ex1, exercise = TRUE, exercise.lines = 3}
+
+```
+
+```{r ex1-solution}
+cov(BLM$NegCon,BLM$blm)
+cor(BLM$NegCon,BLM$blm)
+plot(BLM$NegCon,BLM$blm)
+
+```
+
+## Guess the correlation!
+
+Use this interactive app to guess 10 different correlations. 
+
+```{r}
+knitr::include_app("https://istats.shinyapps.io/guesscorr/", height = "1000px")
+```
+
+## 
+
+Congratulations! You've reached the end of the tutorial. Here is what you need to do to obtain credit. Take the completion token below and copy it. Open Canvas as go to the assignment called Correlation tutorial. Enter your token!
+
+
+```{r echo=F}
+stringi::stri_rand_strings(1, 5, pattern = "[A-Za-z0-9]")
+```
+
