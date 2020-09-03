@@ -8,7 +8,7 @@
 A data frame with 1587 rows and 11 variables:
 \describe{
 \item{CCD}{Climate Change Denial}
-\item{ANITESTABL}{Anti-Establishment Beliefs}
+\item{ANTIESTABL}{Anti-Establishment Beliefs}
 \item{EXCL_ANTIEG}{Anti-Egalitarian Preferences}
 \item{TRADVALUE}{Traditional Values}
 \item{OPENNESS}{Openness}
@@ -19,10 +19,11 @@ A data frame with 1587 rows and 11 variables:
 \item{Education}{Education = Five Categories}
 \item{ed}{Education = Two Categories}
 }
+}
 \usage{
 denial
 }
 \description{
-Climate Change Denial
+A dataset examining climate change denial and personality characteristics
 }
 \keyword{datasets}
