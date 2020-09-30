@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+<meta name="progressive" content="false" />
+<meta name="allow-skip" content="false" />
+
+<title>t-tests</title>
+
+
+<!-- highlightjs -->
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+<!-- taken from https://github.com/rstudio/rmarkdown/blob/67b7f5fc779e4cfdfd0f021d3d7745b6b6e17149/inst/rmd/h/default.html#L296-L362 -->
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("section-TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+<!-- end tabsets -->
+
+
+
+</head>
+
+<body>
+
+
+
+<div class="pageContent band">
+<div class="bandContent page">
+
+<div class="topics">
+
+<div id="section-t-tests" class="section level1">
+<h1>t-tests</h1>
+<div id="section-overview" class="section level2">
+<h2>Overview</h2>
+<p>This tutorial focuses on three forms of the t-test, one of the real workhorse statistics in psychology. We will introduce the one sample t first then move to the more common applications - independent and paired samples.</p>
+<p>The PowerPoint slides for the presentation in the videos are on Canvas if you want a standalone copy.</p>
+<p>The videos (as well as others) can also be found on my YouTube channel <a href="https://www.youtube.com/channel/UC5kDZTyHZlgSgSEa3YQXOi" class="uri">https://www.youtube.com/channel/UC5kDZTyHZlgSgSEa3YQXOi</a></p>
+<div id="section-learning-objectives" class="section level3">
+<h3>Learning Objectives</h3>
+<p>Identify the three forms of t-test</p>
+<p>Explain the conditions for applying each t-test</p>
+<p>Compute 95% confidence intervals and t-tests</p>
+<p>Given a problem, define the null and alternative hypotheses</p>
+<p>Apply the above procedures to making decisions about null hypotheses</p>
+<p>Describe and calculate Cohen’s d as a measure of effect size</p>
+</div>
+</div>
+<div id="section-video-1-introduction-to-t-tests" class="section level2">
+<h2>Video 1 Introduction to t-tests</h2>
+<div class="figure">
+<img src="https://youtu.be/Tn1hHNvI9jY" alt="" />
+<p class="caption">Video 1: Introduction</p>
+</div>
+</div>
+<div id="section-quiz-1" class="section level2">
+<h2>Quiz 1</h2>
+<p><div class="panel-heading tutorial-quiz-title">Quiz</div><div class="panel panel-default">
+<div data-label="quiz1-1" class="tutorial-question panel-body">
+<div id="quiz1-1-answer_container" class="shiny-html-output"></div>
+<div id="quiz1-1-message_container" class="shiny-html-output"></div>
+<div id="quiz1-1-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div><div class="panel panel-default">
+<div data-label="quiz1-2" class="tutorial-question panel-body">
+<div id="quiz1-2-answer_container" class="shiny-html-output"></div>
+<div id="quiz1-2-message_container" class="shiny-html-output"></div>
+<div id="quiz1-2-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div><div class="panel panel-default">
+<div data-label="quiz1-3" class="tutorial-question panel-body">
+<div id="quiz1-3-answer_container" class="shiny-html-output"></div>
+<div id="quiz1-3-message_container" class="shiny-html-output"></div>
+<div id="quiz1-3-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div></p>
+</div>
+<div id="section-video-2-one-sample-t" class="section level2">
+<h2>Video 2 One Sample t</h2>
+<p><img src="https://youtu.be/TLkgI0qXsOs" /></p>
+</div>
+<div id="section-quiz-2" class="section level2">
+<h2>Quiz 2</h2>
+<p><div class="panel-heading tutorial-quiz-title">Quiz</div><div class="panel panel-default">
+<div data-label="quiz2-1" class="tutorial-question panel-body">
+<div id="quiz2-1-answer_container" class="shiny-html-output"></div>
+<div id="quiz2-1-message_container" class="shiny-html-output"></div>
+<div id="quiz2-1-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div><div class="panel panel-default">
+<div data-label="quiz2-2" class="tutorial-question panel-body">
+<div id="quiz2-2-answer_container" class="shiny-html-output"></div>
+<div id="quiz2-2-message_container" class="shiny-html-output"></div>
+<div id="quiz2-2-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div><div class="panel panel-default">
+<div data-label="quiz2-3" class="tutorial-question panel-body">
+<div id="quiz2-3-answer_container" class="shiny-html-output"></div>
+<div id="quiz2-3-message_container" class="shiny-html-output"></div>
+<div id="quiz2-3-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div></p>
+</div>
+<div id="section-video-3-t-test-iii-independent-samples-t" class="section level2">
+<h2>Video 3: t-test III Independent Samples t</h2>
+<p><img src="https://youtu.be/_jGBaAFahUo" /></p>
+</div>
+<div id="section-quiz-3" class="section level2">
+<h2>Quiz 3</h2>
+<p><div class="panel-heading tutorial-quiz-title">Quiz</div><div class="panel panel-default">
+<div data-label="quiz3-1" class="tutorial-question panel-body">
+<div id="quiz3-1-answer_container" class="shiny-html-output"></div>
+<div id="quiz3-1-message_container" class="shiny-html-output"></div>
+<div id="quiz3-1-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div><div class="panel panel-default">
+<div data-label="quiz3-2" class="tutorial-question panel-body">
+<div id="quiz3-2-answer_container" class="shiny-html-output"></div>
+<div id="quiz3-2-message_container" class="shiny-html-output"></div>
+<div id="quiz3-2-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div><div class="panel panel-default">
+<div data-label="quiz3-3" class="tutorial-question panel-body">
+<div id="quiz3-3-answer_container" class="shiny-html-output"></div>
+<div id="quiz3-3-message_container" class="shiny-html-output"></div>
+<div id="quiz3-3-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div></p>
+</div>
+<div id="section-video-iv-effect-size" class="section level2">
+<h2>Video IV Effect Size</h2>
+<p><img src="https://youtu.be/T4pSyn9w4Og" /></p>
+</div>
+<div id="section-quiz-4" class="section level2">
+<h2>Quiz 4</h2>
+<p><div class="panel-heading tutorial-quiz-title">Quiz</div><div class="panel panel-default">
+<div data-label="quiz4-1" class="tutorial-question panel-body">
+<div id="quiz4-1-answer_container" class="shiny-html-output"></div>
+<div id="quiz4-1-message_container" class="shiny-html-output"></div>
+<div id="quiz4-1-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div><div class="panel panel-default">
+<div data-label="quiz4-2" class="tutorial-question panel-body">
+<div id="quiz4-2-answer_container" class="shiny-html-output"></div>
+<div id="quiz4-2-message_container" class="shiny-html-output"></div>
+<div id="quiz4-2-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div></p>
+</div>
+<div id="section-video-v-examples-from-the-literature" class="section level2">
+<h2>Video V Examples from the literature</h2>
+<p><img src="https://youtu.be/_8yxTscGnv8" /></p>
+</div>
+<div id="section-exercise" class="section level2">
+<h2>Exercise</h2>
+<p>The following examples use the <em>Denial2</em> data. To facilitate t-test, I have removed transgendered people from these data as there are two few to analyze.</p>
+<p>The code for the independent samples t places the dependent variable (the variable that is interval/ratio) on the left and the dichotomous variable on the right. The code is largely identical to the format we used for regression.</p>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  denial2$CCD by denial2$Gender
+## t = 1.7484, df = 744.52, p-value = 0.0808
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.008074154  0.139571511
+## sample estimates:
+##   mean in group Man mean in group Woman 
+##            1.464924            1.399175</code></pre>
+<p>The <em>lsr</em> package computes a variety of effect sizes. The format is similar to the t-test but the command is different. This is the first time we’ve used a package. The lsr:: piece lets R know you are using something from a package. CohensD is the command.</p>
+<pre><code>## [1] 0.1042588</code></pre>
+<p>Run a t-test comparing climate change denial <strong>CCD</strong> for those with and without college educations <strong>ed</strong>. Obtain an effect size for the relationship.</p>
+<div class="tutorial-exercise" data-label="ex2" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="2">
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+</div>
+<div class="tutorial-exercise-support" data-label="ex2-solution" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
+<pre class="text"><code>t.test(denial2$CCD~denial2$ed)
+lsr::cohensD(denial2$CCD~denial2$ed)</code></pre>
+</div>
+</div>
+<div id="section-quiz-5" class="section level2">
+<h2>Quiz 5</h2>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  denial2$CCD by denial2$ed
+## t = -0.43519, df = 700.44, p-value = 0.6636
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.08835475  0.05629248
+## sample estimates:
+## mean in group Less Than College           mean in group College 
+##                        1.414436                        1.430467</code></pre>
+<pre><code>## [1] 0.02539365</code></pre>
+<p>The following questions refer to the analyses you just ran. Results are reproduced above for your convenience.</p>
+<p><div class="panel-heading tutorial-quiz-title">Quiz</div><div class="panel panel-default">
+<div data-label="quiz5-1" class="tutorial-question panel-body">
+<div id="quiz5-1-answer_container" class="shiny-html-output"></div>
+<div id="quiz5-1-message_container" class="shiny-html-output"></div>
+<div id="quiz5-1-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div><div class="panel panel-default">
+<div data-label="quiz5-2" class="tutorial-question panel-body">
+<div id="quiz5-2-answer_container" class="shiny-html-output"></div>
+<div id="quiz5-2-message_container" class="shiny-html-output"></div>
+<div id="quiz5-2-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div><div class="panel panel-default">
+<div data-label="quiz5-3" class="tutorial-question panel-body">
+<div id="quiz5-3-answer_container" class="shiny-html-output"></div>
+<div id="quiz5-3-message_container" class="shiny-html-output"></div>
+<div id="quiz5-3-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div></p>
+</div>
+<div id="section-video-v-errors" class="section level2">
+<h2>Video V Errors</h2>
+<p><img src="https://youtu.be/57QRJ-ftysU" /></p>
+</div>
+<div id="section-quiz-6" class="section level2">
+<h2>Quiz 6</h2>
+<p><div class="panel-heading tutorial-quiz-title">Quiz</div><div class="panel panel-default">
+<div data-label="quiz6-1" class="tutorial-question panel-body">
+<div id="quiz6-1-answer_container" class="shiny-html-output"></div>
+<div id="quiz6-1-message_container" class="shiny-html-output"></div>
+<div id="quiz6-1-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div><div class="panel panel-default">
+<div data-label="quiz6-2" class="tutorial-question panel-body">
+<div id="quiz6-2-answer_container" class="shiny-html-output"></div>
+<div id="quiz6-2-message_container" class="shiny-html-output"></div>
+<div id="quiz6-2-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div><div class="panel panel-default">
+<div data-label="quiz6-3" class="tutorial-question panel-body">
+<div id="quiz6-3-answer_container" class="shiny-html-output"></div>
+<div id="quiz6-3-message_container" class="shiny-html-output"></div>
+<div id="quiz6-3-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div></p>
+</div>
+<div id="section-video-vi-calculations-and-application" class="section level2">
+<h2>Video VI Calculations and Application</h2>
+<p><img src="https://youtu.be/E3amhoxp12A" /></p>
+</div>
+<div id="section-quiz-7" class="section level2">
+<h2>Quiz 7</h2>
+<p><span class="math inline">\(\huge \sigma_\bar{x} = \frac{\sigma}{\sqrt{n}}\)</span></p>
+<p><span class="math inline">\(\huge 95\% CI = \bar{x} \pm (z_{.95})(\sigma_\bar{x})\)</span></p>
+<p>The Bayley Scale of infant development is a widely used measure of cognitive, motor, and behavioral development of infants and young children. Use with a large number of infants (well over 10,000) established the population mean as 100 with a standard deviation of 15. You are interested in whether students whose mothers received regular prenatal care (e.g., completed monthly medical visits) show improved development scores. The researcher takes a sample of 30 infants born from parents who completed regular prenatal care, those infants produced M = 102 and a SD = 16.</p>
+<p><div class="panel-heading tutorial-quiz-title">Quiz</div><div class="panel panel-default">
+<div data-label="quiz7-1" class="tutorial-question panel-body">
+<div id="quiz7-1-answer_container" class="shiny-html-output"></div>
+<div id="quiz7-1-message_container" class="shiny-html-output"></div>
+<div id="quiz7-1-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div><div class="panel panel-default">
+<div data-label="quiz7-2" class="tutorial-question panel-body">
+<div id="quiz7-2-answer_container" class="shiny-html-output"></div>
+<div id="quiz7-2-message_container" class="shiny-html-output"></div>
+<div id="quiz7-2-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div><div class="panel panel-default">
+<div data-label="quiz7-3" class="tutorial-question panel-body">
+<div id="quiz7-3-answer_container" class="shiny-html-output"></div>
+<div id="quiz7-3-message_container" class="shiny-html-output"></div>
+<div id="quiz7-3-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div></p>
+</div>
+<div id="section-video-viii-using-r" class="section level2">
+<h2>Video VIII Using R</h2>
+<p><img src="https://youtu.be/lMoJnwqy3mE" /></p>
+</div>
+<div id="section-exercise-1" class="section level2">
+<h2>Exercise</h2>
+<p>The Bayley Scale of infant development is a widely used measure of cognitive, motor, and behavioral development of infants and young children. Use with a large number of infants (well over 10,000) established the population mean as 100 with a standard deviation of 15. You are interested in whether students whose mothers received regular prenatal care (e.g., completed monthly medical visits) show improved development scores. The researcher takes a sample of 30 infants born from parents who completed regular prenatal care, those infants produced M = 102 and a SD = 16.</p>
+<p>To perform calculations using R, we need the function z.test (I have already made this active). We simply provide sample mean (m), hypothesized population mean (mu), sample size(n), and standard deviation (s). For our previous example we would use the following.</p>
+<pre class="r"><code>z.test(m=102,n=30,mu=100,s=16)</code></pre>
+<pre><code>## $CI95PCT
+## [1]  96.27447 107.72553
+## 
+## $z
+## [1] 0.6846532
+## 
+## $p
+## [1] 0.4935628</code></pre>
+<p>Another researcher argues that prenatal care is only effective in improving physical development (i.e., motor development). That research used the Alberta Infant Motor Scale. The scale authors report a mean of 50 and a standard deviation of 16 for 8 month old children. The researcher takes a sample of 50 infants born from parents who completed regular prenatal care, those infants produces a M = 55.</p>
+<div class="tutorial-exercise" data-label="ex1" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="1">
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+</div>
+<div class="tutorial-exercise-support" data-label="ex1-solution" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
+<pre class="text"><code>z.test(m=55,n=50,mu=50,s=16)</code></pre>
+</div>
+<div id="section-quiz-8" class="section level3">
+<h3>Quiz 8</h3>
+<p><div class="panel-heading tutorial-quiz-title">Quiz</div><div class="panel panel-default">
+<div data-label="quiz8-1" class="tutorial-question panel-body">
+<div id="quiz8-1-answer_container" class="shiny-html-output"></div>
+<div id="quiz8-1-message_container" class="shiny-html-output"></div>
+<div id="quiz8-1-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div><div class="panel panel-default">
+<div data-label="quiz8-2" class="tutorial-question panel-body">
+<div id="quiz8-2-answer_container" class="shiny-html-output"></div>
+<div id="quiz8-2-message_container" class="shiny-html-output"></div>
+<div id="quiz8-2-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div><div class="panel panel-default">
+<div data-label="quiz8-3" class="tutorial-question panel-body">
+<div id="quiz8-3-answer_container" class="shiny-html-output"></div>
+<div id="quiz8-3-message_container" class="shiny-html-output"></div>
+<div id="quiz8-3-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div></p>
+</div>
+</div>
+<div id="section-video-ix-power-and-other-issues" class="section level2">
+<h2>Video IX Power and Other Issues</h2>
+<p><img src="https://youtu.be/0cGeAHgZJ_s" /></p>
+</div>
+<div id="section-quiz-9" class="section level2">
+<h2>Quiz 9</h2>
+<p><div class="panel-heading tutorial-quiz-title">Quiz</div><div class="panel panel-default">
+<div data-label="quiz9-1" class="tutorial-question panel-body">
+<div id="quiz9-1-answer_container" class="shiny-html-output"></div>
+<div id="quiz9-1-message_container" class="shiny-html-output"></div>
+<div id="quiz9-1-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div><div class="panel panel-default">
+<div data-label="quiz9-2" class="tutorial-question panel-body">
+<div id="quiz9-2-answer_container" class="shiny-html-output"></div>
+<div id="quiz9-2-message_container" class="shiny-html-output"></div>
+<div id="quiz9-2-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div><div class="panel panel-default">
+<div data-label="quiz9-3" class="tutorial-question panel-body">
+<div id="quiz9-3-answer_container" class="shiny-html-output"></div>
+<div id="quiz9-3-message_container" class="shiny-html-output"></div>
+<div id="quiz9-3-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div></p>
+</div>
+<div id="section-section" class="section level2">
+<h2></h2>
+<p>Congratulations! You’ve reached the end of the tutorial. Here is what you need to do to obtain credit. Take the completion token below and copy it. Open Canvas as go to the assignment called NHST tutorial. Enter your token!</p>
+<pre><code>## [1] &quot;DwqZI&quot;</code></pre>
+
+<script type="application/shiny-prerendered" data-context="server-start">
+library(learnr)
+library(knitr)
+library(ggplot2)
+library(IntroStatsTutorials)
+load(file="G:/My Drive/IntroStatsTutorials/data/denial2.RData")
+knitr::opts_chunk$set(echo = FALSE)
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::register_http_handlers(session, metadata = NULL)
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+session$onSessionEnded(function() {
+        learnr:::session_stop_event(session)
+      })
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz1-1", question = structure("t-test address a specific limitation of the z-test. Identify the limitation.", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_82713c3",     option = "We rarely know the population standard deviation",     value = "We rarely know the population standard deviation",     label = structure("We rarely know the population standard deviation", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_b93977",     option = "We rarely know the sample standard deviation",     value = "We rarely know the sample standard deviation", label = structure("We rarely know the sample standard deviation", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_ceef141",     option = "The normal distribution does not exist", value = "The normal distribution does not exist",     label = structure("The normal distribution does not exist", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_d537059",     option = "z-tests are super hard to calculate", value = "z-tests are super hard to calculate",     label = structure("z-tests are super hard to calculate", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz1-1-answer", question = "quiz1-1"), loading = structure("<strong>Loading:<\u002fstrong> \nt-test address a specific limitation of the z-test. Identify the limitation.\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 1623291838.2441, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz1-2", question = structure("The independent samples t-test is used when we want to ...  ", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_7ba2d4d",     option = "Compare means between two groups of different people",     value = "Compare means between two groups of different people",     label = structure("Compare means between two groups of different people", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_f3f82f0",     option = "Compare means between one group of people measured at two time points",     value = "Compare means between one group of people measured at two time points",     label = structure("Compare means between one group of people measured at two time points", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_d61c499",     option = "Estimate the population standard deviation", value = "Estimate the population standard deviation",     label = structure("Estimate the population standard deviation", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_ffb70bd",     option = "Compare one group to a hypothesized mean", value = "Compare one group to a hypothesized mean",     label = structure("Compare one group to a hypothesized mean", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct.", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz1-2-answer", question = "quiz1-2"), loading = structure("<strong>Loading:<\u002fstrong> \nThe independent samples t-test is used when we want to ...<br/>\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 560885115.238818, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz1-3", question = structure("The paired samples t-test is used when we want to ...  ", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_89faa65",     option = "Compare means between two groups of different people",     value = "Compare means between two groups of different people",     label = structure("Compare means between two groups of different people", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_a520d08",     option = "Compare means between one group of people measured at two time points",     value = "Compare means between one group of people measured at two time points",     label = structure("Compare means between one group of people measured at two time points", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_6ffe1b",     option = "Estimate the population standard deviation", value = "Estimate the population standard deviation",     label = structure("Estimate the population standard deviation", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_42dde38",     option = "Compare one group to a hypothesized mean", value = "Compare one group to a hypothesized mean",     label = structure("Compare one group to a hypothesized mean", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct.", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz1-3-answer", question = "quiz1-3"), loading = structure("<strong>Loading:<\u002fstrong> \nThe paired samples t-test is used when we want to ...<br/>\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 66652035.4689627, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz2-1", question = structure("The one sample t is used to ... ", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_8801627",     option = "Compare means between two groups of different people",     value = "Compare means between two groups of different people",     label = structure("Compare means between two groups of different people", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_9008167",     option = "Compare means between one group of people measured at two time points",     value = "Compare means between one group of people measured at two time points",     label = structure("Compare means between one group of people measured at two time points", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_275ea8",     option = "Estimate the population standard deviation", value = "Estimate the population standard deviation",     label = structure("Estimate the population standard deviation", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_87e09e6",     option = "Compare one group to a hypothesized mean", value = "Compare one group to a hypothesized mean",     label = structure("Compare one group to a hypothesized mean", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz2-1-answer", question = "quiz2-1"), loading = structure("<strong>Loading:<\u002fstrong> \nThe one sample t is used to ... \n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 2090986269.52631, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz2-2", question = structure("The Stanford-Binet IQ test is known to produce a population mean of 100. You are interested in whether students at &#39;elite&#39; colleges are actually smarter than average. Your sample 200 students and obtain a sample mean of 102, <strong>t<\u002fstrong>(199) = 1.90, <strong>p<\u002fstrong>=.06. What is the null hypothesis?", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_9993611",     option = "The population mean (mu) = 100", value = "The population mean (mu) = 100",     label = structure("The population mean (mu) = 100", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_c2d0d8b",     option = "The population mean (mu) = 102", value = "The population mean (mu) = 102",     label = structure("The population mean (mu) = 102", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_6c18a8c",     option = "The sample mean = 100", value = "The sample mean = 100",     label = structure("The sample mean = 100", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_6b0cb8b",     option = "The sample mean = 102", value = "The sample mean = 102",     label = structure("The sample mean = 102", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct! Null hypotheses always focus on population means", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz2-2-answer", question = "quiz2-2"), loading = structure("<strong>Loading:<\u002fstrong> \nThe Stanford-Binet IQ test is known to produce a population mean of 100. You are interested in whether students at &#39;elite&#39; colleges are actually smarter than average. Your sample 200 students and obtain a sample mean of 102, <strong>t<\u002fstrong>(199) = 1.90, <strong>p<\u002fstrong>=.06. What is the null hypothesis?\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 1224388494.42985, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz2-3", question = structure("The Stanford-Binet IQ test is known to produce a population mean of 100. You are interested in whether students at &#39;elite&#39; colleges are actually smarter than average. Your sample 200 students and obtain a sample mean of 102, <strong>t<\u002fstrong>(199) = 1.90, <strong>p<\u002fstrong>=.06. What is your conclusion about the null hypothesis in plain English?", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_89f2db0",     option = "Students at elite colleges do not appear to differ in terms of IQ from the general population",     value = "Students at elite colleges do not appear to differ in terms of IQ from the general population",     label = structure("Students at elite colleges do not appear to differ in terms of IQ from the general population", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_8328f34",     option = "Students at elite colleges have higher IQs than the general population",     value = "Students at elite colleges have higher IQs than the general population",     label = structure("Students at elite colleges have higher IQs than the general population", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_5229084",     option = "Students at elite colleges are spoiled rich kids",     value = "Students at elite colleges are spoiled rich kids",     label = structure("Students at elite colleges are spoiled rich kids", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_f74a83d",     option = "Elite colleges ain't so elite", value = "Elite colleges ain't so elite",     label = structure("Elite colleges ain&#39;t so elite", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct! Here because p &gt; .05, we reject the null hypothesis.", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz2-3-answer", question = "quiz2-3"), loading = structure("<strong>Loading:<\u002fstrong> \nThe Stanford-Binet IQ test is known to produce a population mean of 100. You are interested in whether students at &#39;elite&#39; colleges are actually smarter than average. Your sample 200 students and obtain a sample mean of 102, <strong>t<\u002fstrong>(199) = 1.90, <strong>p<\u002fstrong>=.06. What is your conclusion about the null hypothesis in plain English?\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 1936994168.59802, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz3-1", question = structure("Independent in the context of the t-test means ...  ", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_50b5f8c",     option = "free from outside control", value = "free from outside control",     label = structure("free from outside control", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_967a668",     option = "not depending on another's authority", value = "not depending on another's authority",     label = structure("not depending on another&#39;s authority", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_3306eb3",     option = "different people in two groups", value = "different people in two groups",     label = structure("different people in two groups", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_7fda43f",     option = "None of the above", value = "None of the above",     label = structure("None of the above", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz3-1-answer", question = "quiz3-1"), loading = structure("<strong>Loading:<\u002fstrong> \nIndependent in the context of the t-test means ...<br/>\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 19246790.9910375, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz3-2", question = structure("One group of people received a COVID-19 vaccine and a second group of people received a shot without the vaccine (control group). Two weeks later, their levels of Covid antibodies were measured. An effective vaccine would require a strong increase in the presence of antibodies. A t-test comparing the groups produced <strong>t<\u002fstrong>(1998)=14.8, <strong>p<\u002fstrong>&lt;.001 with the mean for the group who got the vaccine being 30 AU/ml and the mean for those who did not was 2 AU/ml. What is the null hypothesis?", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_6d25cea",     option = "The population mean (mu) = 0", value = "The population mean (mu) = 0",     label = structure("The population mean (mu) = 0", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_c778f0a",     option = "The population mean (mu1) for the vaccine group is equal to the population mean (mu2) for the control group",     value = "The population mean (mu1) for the vaccine group is equal to the population mean (mu2) for the control group",     label = structure("The population mean (mu1) for the vaccine group is equal to the population mean (mu2) for the control group", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_3f229cc",     option = "The difference between the two population means is 28",     value = "The difference between the two population means is 28",     label = structure("The difference between the two population means is 28", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_9b8917f",     option = "The population mean (mu1) for the vaccine group is not equal to the population mean (mu2) for the control group",     value = "The population mean (mu1) for the vaccine group is not equal to the population mean (mu2) for the control group",     label = structure("The population mean (mu1) for the vaccine group is not equal to the population mean (mu2) for the control group", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz3-2-answer", question = "quiz3-2"), loading = structure("<strong>Loading:<\u002fstrong> \nOne group of people received a COVID-19 vaccine and a second group of people received a shot without the vaccine (control group). Two weeks later, their levels of Covid antibodies were measured. An effective vaccine would require a strong increase in the presence of antibodies. A t-test comparing the groups produced <strong>t<\u002fstrong>(1998)=14.8, <strong>p<\u002fstrong>&lt;.001 with the mean for the group who got the vaccine being 30 AU/ml and the mean for those who did not was 2 AU/ml. What is the null hypothesis?\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 1329063658.38111, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz3-3", question = structure("One group of people received a COVID-19 vaccine and a second group of people received a shot without the vaccine (control group). Two weeks later, their levels of Covid antibodies were measured. An effective vaccine would require a strong increase in the presence of antibodies. A t-test comparing the groups produced <strong>t<\u002fstrong>(1998)=14.8, <strong>p<\u002fstrong>&lt;.001 with the mean for the group who got the vaccine being 30 AU/ml and the mean for those who did not was 2 AU/ml. What is the correct interpretation of these values?", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_6be14f5",     option = "The population mean is unlikely to be 0", value = "The population mean is unlikely to be 0",     label = structure("The population mean is unlikely to be 0", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_5bb6739",     option = "The group receiving the vaccine had a stronger antibody response than the group that did not",     value = "The group receiving the vaccine had a stronger antibody response than the group that did not",     label = structure("The group receiving the vaccine had a stronger antibody response than the group that did not", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_7ca7ff4",     option = "The vaccine don't work", value = "The vaccine don't work",     label = structure("The vaccine don&#39;t work", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_1ac64cd",     option = "Vaccines cause autism", value = "Vaccines cause autism",     label = structure("Vaccines cause autism", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz3-3-answer", question = "quiz3-3"), loading = structure("<strong>Loading:<\u002fstrong> \nOne group of people received a COVID-19 vaccine and a second group of people received a shot without the vaccine (control group). Two weeks later, their levels of Covid antibodies were measured. An effective vaccine would require a strong increase in the presence of antibodies. A t-test comparing the groups produced <strong>t<\u002fstrong>(1998)=14.8, <strong>p<\u002fstrong>&lt;.001 with the mean for the group who got the vaccine being 30 AU/ml and the mean for those who did not was 2 AU/ml. What is the correct interpretation of these values?\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 1412488077.84226, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz4-1", question = structure("The measure of effect size discussed in the video is ... ", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_eeec91b",     option = "Cohen's d", value = "Cohen's d", label = structure("Cohen&#39;s d", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_1c5d88",     option = "Cohen's t", value = "Cohen's t", label = structure("Cohen&#39;s t", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_159c5ee",     option = "eta squared", value = "eta squared", label = structure("eta squared", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_8653d0e",     option = "omega squared", value = "omega squared", label = structure("omega squared", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz4-1-answer", question = "quiz4-1"), loading = structure("<strong>Loading:<\u002fstrong> \nThe measure of effect size discussed in the video is ... \n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 1846086122.64035, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz4-2", question = structure("The effect size measures", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_c88813b",     option = "The magnitude of differences between two groups",     value = "The magnitude of differences between two groups",     label = structure("The magnitude of differences between two groups", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_ea636a4",     option = "Whether we can say two groups differ", value = "Whether we can say two groups differ",     label = structure("Whether we can say two groups differ", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_6e03b42",     option = "The size of the effect", value = "The size of the effect",     label = structure("The size of the effect", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_5236819",     option = "The null hypothesis", value = "The null hypothesis",     label = structure("The null hypothesis", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz4-2-answer", question = "quiz4-2"), loading = structure("<strong>Loading:<\u002fstrong> \nThe effect size measures\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 277103006.370964, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+`tutorial-exercise-ex2-result` <- learnr:::setup_exercise_handler(reactive(req(input$`tutorial-exercise-ex2-code-editor`)), session)
+output$`tutorial-exercise-ex2-output` <- renderUI({
+  `tutorial-exercise-ex2-result`()
+})
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz5-1", question = structure("What is the null hyptothesis?", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_8b6703f",     option = "$\\mu_1-\\mu_2=0$", value = "$\\mu_1-\\mu_2=0$",     label = structure("\\(\\mu_1-\\mu_2=0\\)", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_7c1858",     option = "A formal prediction of an effect", value = "A formal prediction of an effect",     label = structure("A formal prediction of an effect", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_a2c99c6",     option = "Nothing. Because null means nothing.", value = "Nothing. Because null means nothing.",     label = structure("Nothing. Because null means nothing.", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_3fc2ed4",     option = "A not guilty plea", value = "A not guilty plea",     label = structure("A not guilty plea", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz5-1-answer", question = "quiz5-1"), loading = structure("<strong>Loading:<\u002fstrong> \nWhat is the null hyptothesis?\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 1408343046.84419, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz5-2", question = structure("The alternative hypothesis is ...", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_a272ab0",     option = "The opposite of the null hypothesis", value = "The opposite of the null hypothesis",     label = structure("The opposite of the null hypothesis", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_f00c3c4",     option = "Another name for the null hypothesis", value = "Another name for the null hypothesis",     label = structure("Another name for the null hypothesis", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_7dd2be4",     option = "The hypothesis preferred by alternative music fans",     value = "The hypothesis preferred by alternative music fans",     label = structure("The hypothesis preferred by alternative music fans", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_da19ffd",     option = "Another name for alpha level", value = "Another name for alpha level",     label = structure("Another name for alpha level", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct! ", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz5-2-answer", question = "quiz5-2"), loading = structure("<strong>Loading:<\u002fstrong> \nThe alternative hypothesis is ...\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 1960580151.58703, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz5-3", question = structure("The alpha level is ... ", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_136f27d",     option = "The level of probability we need to reach to reject the null hypothesis",     value = "The level of probability we need to reach to reject the null hypothesis",     label = structure("The level of probability we need to reach to reject the null hypothesis", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_4309ff0",     option = "The same as the beta level", value = "The same as the beta level",     label = structure("The same as the beta level", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_c92f61a",     option = "The value we must match to reject the null hypothesis",     value = "The value we must match to reject the null hypothesis",     label = structure("The value we must match to reject the null hypothesis", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_f94e600",     option = "Much worse than the Gamma level", value = "Much worse than the Gamma level",     label = structure("Much worse than the Gamma level", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz5-3-answer", question = "quiz5-3"), loading = structure("<strong>Loading:<\u002fstrong> \nThe alpha level is ... \n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 832210670.112472, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz6-1", question = structure("When we fail to reject a null hypothesis that is actually false, we have made a ...", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_3625c03",     option = "Type II Error", value = "Type II Error", label = structure("Type II Error", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_7e1ba50",     option = "Type I Error", value = "Type I Error", label = structure("Type I Error", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_7187e92",     option = "Alpha error", value = "Alpha error", label = structure("Alpha error", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_869dae8",     option = "Mistake", value = "Mistake", label = structure("Mistake", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct! A Type II error is a false negative!", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz6-1-answer", question = "quiz6-1"), loading = structure("<strong>Loading:<\u002fstrong> \nWhen we fail to reject a null hypothesis that is actually false, we have made a ...\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 61959889.9711477, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz6-2", question = structure("If we reject a true null hypothesis we have made a", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_491339b",     option = "Alpha Error", value = "Alpha Error", label = structure("Alpha Error", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_35e89d",     option = "Type II Error", value = "Type II Error", label = structure("Type II Error", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_9a150c3",     option = "Beta error", value = "Beta error", label = structure("Beta error", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_cf20f30",     option = "Mistake", value = "Mistake", label = structure("Mistake", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct! ", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz6-2-answer", question = "quiz6-2"), loading = structure("<strong>Loading:<\u002fstrong> \nIf we reject a true null hypothesis we have made a\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 1676409552.71936, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz6-3", question = structure("Typically, we reject a null hypothesis when our probability is  ... ", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_18f09a3",     option = "Less than .05", value = "Less than .05", label = structure("Less than .05", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_12738f9",     option = "Greater than .05", value = "Greater than .05",     label = structure("Greater than .05", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_4b0f26f",     option = "Exactly .05", value = "Exactly .05", label = structure("Exactly .05", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_549705c",     option = "Probability has nothing to do with this.", value = "Probability has nothing to do with this.",     label = structure("Probability has nothing to do with this.", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct! ", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz6-3-answer", question = "quiz6-3"), loading = structure("<strong>Loading:<\u002fstrong> \nTypically, we reject a null hypothesis when our probability is  ... \n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 111183769.448226, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz7-1", question = structure("The null hypothesis would be ...", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_3ce3078",     option = "Infants who had regular prenatal care have a mean of 100",     value = "Infants who had regular prenatal care have a mean of 100",     label = structure("Infants who had regular prenatal care have a mean of 100", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_28863a9",     option = "Infants who had regular prenatal care have a mean greater than 100",     value = "Infants who had regular prenatal care have a mean greater than 100",     label = structure("Infants who had regular prenatal care have a mean greater than 100", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_dc858ab",     option = "Infants who had regular prenatal care have a mean less than 100",     value = "Infants who had regular prenatal care have a mean less than 100",     label = structure("Infants who had regular prenatal care have a mean less than 100", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_f069ea6",     option = "None of the above", value = "None of the above",     label = structure("None of the above", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct! We always begin with a null assumption. In this case we expect these kids to be just like everyone else", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz7-1-answer", question = "quiz7-1"), loading = structure("<strong>Loading:<\u002fstrong> \nThe null hypothesis would be ...\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 1459030963.82059, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz7-2", question = structure("What is the 95% Confidence Interval", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_d4b438c",     option = "96.2 to 107.7", value = "96.2 to 107.7", label = structure("96.2 to 107.7", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_d97928e",     option = "101.0 to 103.0", value = "101.0 to 103.0", label = structure("101.0 to 103.0", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_a89206e",     option = "94.3 to 105.7", value = "94.3 to 105.7", label = structure("94.3 to 105.7", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_8effcf0",     option = "90 to 110", value = "90 to 110", label = structure("90 to 110", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct! ", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz7-2-answer", question = "quiz7-2"), loading = structure("<strong>Loading:<\u002fstrong> \nWhat is the 95% Confidence Interval\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 234755318.390684, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz7-3", question = structure("What is your conclusion about the null hypothesis?", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_61c3d85",     option = "Fail to reject the null", value = "Fail to reject the null",     label = structure("Fail to reject the null", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_37c13c4",     option = "Reject the null", value = "Reject the null", label = structure("Reject the null", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_ac4b13b",     option = "Accept the null", value = "Accept the null", label = structure("Accept the null", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_6e50001",     option = "It is wrong", value = "It is wrong", label = structure("It is wrong", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct! The value in the null falls inside our confidence intervals so we fail to reject it. When we fail to reject it is because our sample result would not be surprising if the null were true.", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz7-3-answer", question = "quiz7-3"), loading = structure("<strong>Loading:<\u002fstrong> \nWhat is your conclusion about the null hypothesis?\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 2049983050.0454, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+`tutorial-exercise-ex1-result` <- learnr:::setup_exercise_handler(reactive(req(input$`tutorial-exercise-ex1-code-editor`)), session)
+output$`tutorial-exercise-ex1-output` <- renderUI({
+  `tutorial-exercise-ex1-result`()
+})
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz8-1", question = structure("What is your conclusion about the null hypothesis", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_cafec47",     option = "Reject", value = "Reject", label = structure("Reject", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_d1a178e",     option = "Fail to Reject", value = "Fail to Reject", label = structure("Fail to Reject", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_9832a09",     option = "Accept", value = "Accept", label = structure("Accept", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_7f17a2b",     option = "Fail to Accept", value = "Fail to Accept", label = structure("Fail to Accept", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz8-1-answer", question = "quiz8-1"), loading = structure("<strong>Loading:<\u002fstrong> \nWhat is your conclusion about the null hypothesis\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 258529731.879613, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz8-2", question = structure("Which option reflect the best conclusion drawn from these data", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_e1858b6",     option = "Infants who received prenatal care have better than average motor skills",     value = "Infants who received prenatal care have better than average motor skills",     label = structure("Infants who received prenatal care have better than average motor skills", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_5c8f946",     option = "Infants who received prenatal care differ from those that did not",     value = "Infants who received prenatal care differ from those that did not",     label = structure("Infants who received prenatal care differ from those that did not", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_a00b3be",     option = "Infants who received prenatal care do not differ from those that did not",     value = "Infants who received prenatal care do not differ from those that did not",     label = structure("Infants who received prenatal care do not differ from those that did not", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_961c39d",     option = "We made a Type I error", value = "We made a Type I error",     label = structure("We made a Type I error", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct! ", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz8-2-answer", question = "quiz8-2"), loading = structure("<strong>Loading:<\u002fstrong> \nWhich option reflect the best conclusion drawn from these data\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 1362477726.86555, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz8-3", question = structure("If it were actually the case in the population that infants who received prenatal care have the same motor development as those that did not, our results would represent", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_8dc2fb",     option = "A Type I Error", value = "A Type I Error", label = structure("A Type I Error", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_331baf4",     option = "A Type II Error", value = "A Type II Error", label = structure("A Type II Error", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_aa5d99d",     option = "A Type III Error", value = "A Type III Error",     label = structure("A Type III Error", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_d87aa00",     option = "Both a Type I Error and a Type II Error", value = "Both a Type I Error and a Type II Error",     label = structure("Both a Type I Error and a Type II Error", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct! ", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz8-3-answer", question = "quiz8-3"), loading = structure("<strong>Loading:<\u002fstrong> \nIf it were actually the case in the population that infants who received prenatal care have the same motor development as those that did not, our results would represent\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 758693308.146706, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz9-1", question = structure("What is power?", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_319d999",     option = "The probability of rejecting a false null hypothesis",     value = "The probability of rejecting a false null hypothesis",     label = structure("The probability of rejecting a false null hypothesis", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_b452e53",     option = "The probability of not rejecting a false null hypothesis",     value = "The probability of not rejecting a false null hypothesis",     label = structure("The probability of not rejecting a false null hypothesis", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_74b89b7",     option = "the probability of accepting the null hypothesis",     value = "the probability of accepting the null hypothesis",     label = structure("the probability of accepting the null hypothesis", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_723f780",     option = "he probability of rejecting the  null hypothesis",     value = "he probability of rejecting the  null hypothesis",     label = structure("he probability of rejecting the  null hypothesis", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz9-1-answer", question = "quiz9-1"), loading = structure("<strong>Loading:<\u002fstrong> \nWhat is power?\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 1451853748.82393, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz9-2", question = structure("Which of the following does not influence power", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_90861be",     option = "All of those", value = "All of those", label = structure("All of those", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_5361776",     option = "Alpha", value = "Alpha", label = structure("Alpha", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_f772b47",     option = "Effect Size", value = "Effect Size", label = structure("Effect Size", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_9af5516",     option = "Sample Size", value = "Sample Size", label = structure("Sample Size", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct! ", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz9-2-answer", question = "quiz9-2"), loading = structure("<strong>Loading:<\u002fstrong> \nWhich of the following does not influence power\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 1821574679.65176, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz9-3", question = structure("Who wrote the best book on Statistical Power", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_ba5df70",     option = "Chris Aberson", value = "Chris Aberson", label = structure("Chris Aberson", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_3b55286",     option = "Jacob Cohen", value = "Jacob Cohen", label = structure("Jacob Cohen", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_560a3ca",     option = "Kevin Murphy", value = "Kevin Murphy", label = structure("Kevin Murphy", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_1283c6e",     option = "Christine Blasey", value = "Christine Blasey",     label = structure("Christine Blasey", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct! Fun fact! Christine Blasey is the woman who now Supreme Court Justice Brett Kavanaugh sexually assualted. She also wrote a book on statistical power. These things are likely not related as Justice Kavanaugh did not sexually assault me, or to the best of my knowledge, any of the other authors listed above. He still sucks though.", html = TRUE, class = c("html", "character")), try_again = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), incorrect = structure("Sorry, that is incorrect. Try again.", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "quiz9-3-answer", question = "quiz9-3"), loading = structure("<strong>Loading:<\u002fstrong> \nWho wrote the best book on Statistical Power\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = TRUE, allow_retry = TRUE,     seed = 1943526087.09498, options = list()), class = c("learnr_radio", "tutorial_question")))
+</script>
+ <!--html_preserve-->
+<script type="application/shiny-prerendered" data-context="dependencies">
+{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["jquery"]},{"type":"character","attributes":{},"value":["1.11.3"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["rmd/h/jquery"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["jquery.min.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["rmarkdown"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["2.3"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["bootstrap"]},{"type":"character","attributes":{},"value":["3.3.5"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["rmd/h/bootstrap"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["viewport"]}},"value":[{"type":"character","attributes":{},"value":["width=device-width, initial-scale=1"]}]},{"type":"character","attributes":{},"value":["js/bootstrap.min.js","shim/html5shiv.min.js","shim/respond.min.js"]},{"type":"character","attributes":{},"value":["css/cerulean.min.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["rmarkdown"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["2.3"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["pagedtable"]},{"type":"character","attributes":{},"value":["1.1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["rmd/h/pagedtable-1.1"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["js/pagedtable.js"]},{"type":"character","attributes":{},"value":["css/pagedtable.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["rmarkdown"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["2.3"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["highlightjs"]},{"type":"character","attributes":{},"value":["9.12.0"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["rmd/h/highlightjs"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["highlight.js"]},{"type":"character","attributes":{},"value":["textmate.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["rmarkdown"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["2.3"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["tutorial"]},{"type":"character","attributes":{},"value":["0.10.1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/tutorial"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["tutorial.js"]},{"type":"character","attributes":{},"value":["tutorial.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.10.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["tutorial-autocompletion"]},{"type":"character","attributes":{},"value":["0.10.1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/tutorial"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["tutorial-autocompletion.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.10.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["tutorial-diagnostics"]},{"type":"character","attributes":{},"value":["0.10.1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/tutorial"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["tutorial-diagnostics.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.10.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["tutorial-format"]},{"type":"character","attributes":{},"value":["0.10.1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["rmarkdown/templates/tutorial/resources"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["tutorial-format.js"]},{"type":"character","attributes":{},"value":["tutorial-format.css","rstudio-theme.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.10.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["jquery"]},{"type":"character","attributes":{},"value":["1.11.3"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["rmd/h/jquery"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["jquery.min.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["rmarkdown"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["2.3"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["navigation"]},{"type":"character","attributes":{},"value":["1.1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["rmd/h/navigation-1.1"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["tabsets.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["rmarkdown"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["2.3"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["highlightjs"]},{"type":"character","attributes":{},"value":["9.12.0"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["rmd/h/highlightjs"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["highlight.js"]},{"type":"character","attributes":{},"value":["default.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["rmarkdown"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["2.3"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["jquery"]},{"type":"character","attributes":{},"value":["1.11.3"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["rmd/h/jquery"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["jquery.min.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["rmarkdown"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["2.3"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["font-awesome"]},{"type":"character","attributes":{},"value":["5.1.0"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["rmd/h/fontawesome"]}]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["css/all.css","css/v4-shims.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["rmarkdown"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["2.3"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["bootbox"]},{"type":"character","attributes":{},"value":["4.4.0"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/bootbox"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["bootbox.min.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.10.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["idb-keyvalue"]},{"type":"character","attributes":{},"value":["3.2.0"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/idb-keyval"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["idb-keyval-iife-compat.min.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[false]},{"type":"character","attributes":{},"value":["0.10.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["tutorial"]},{"type":"character","attributes":{},"value":["0.10.1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/tutorial"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["tutorial.js"]},{"type":"character","attributes":{},"value":["tutorial.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.10.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["tutorial-autocompletion"]},{"type":"character","attributes":{},"value":["0.10.1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/tutorial"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["tutorial-autocompletion.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.10.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["tutorial-diagnostics"]},{"type":"character","attributes":{},"value":["0.10.1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/tutorial"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["tutorial-diagnostics.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.10.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["ace"]},{"type":"character","attributes":{},"value":["1.2.6"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/ace"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["ace.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.10.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["clipboardjs"]},{"type":"character","attributes":{},"value":["1.5.15"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/clipboardjs"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["clipboard.min.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.10.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["ace"]},{"type":"character","attributes":{},"value":["1.2.6"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/ace"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["ace.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.10.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["clipboardjs"]},{"type":"character","attributes":{},"value":["1.5.15"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/clipboardjs"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["clipboard.min.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["learnr"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.10.1"]}]}]}
+</script>
+<!--/html_preserve-->
+<!--html_preserve-->
+<script type="application/shiny-prerendered" data-context="execution_dependencies">
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57]}},"value":[{"type":"character","attributes":{},"value":["backports","base","checkmate","colorspace","compiler","crayon","datasets","digest","dplyr","ellipsis","evaluate","fastmap","generics","ggplot2","glue","graphics","grDevices","grid","gtable","htmltools","htmlwidgets","httpuv","IntroStatsTutorials","jsonlite","knitr","later","learnr","lifecycle","lsr","magrittr","markdown","methods","mime","munsell","pillar","pkgconfig","promises","purrr","R6","Rcpp","rlang","rmarkdown","rprojroot","scales","shiny","stats","stringi","stringr","tibble","tidyselect","tools","utils","vctrs","withr","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.1.7","4.0.2","2.0.0","1.4-1","4.0.2","1.3.4","4.0.2","0.6.25","1.0.0","0.3.1","0.14","1.0.1","0.0.2","3.3.2","1.4.1","4.0.2","4.0.2","4.0.2","0.3.0","0.5.0","1.5.1","1.5.4","0.0.0.9000","1.6.1","1.29","1.1.0.1","0.10.1","0.2.0","0.5","1.5","1.1","4.0.2","0.9","0.5.0","1.4.4","2.0.3","1.1.1","0.3.4","2.4.1","1.0.4.6","0.4.6","2.3","1.3-2","1.1.1","1.5.0","4.0.2","1.4.6","1.4.0","3.0.1","1.1.0","4.0.2","4.0.2","0.3.1","2.2.0","0.15","1.8-4","2.2.1"]}]}]}
+</script>
+<!--/html_preserve-->
+</div>
+</div>
+
+</div> <!-- topics -->
+
+<div class="topicsContainer">
+<div class="topicsPositioner">
+<div class="band">
+<div class="bandContent topicsListContainer">
+
+<!-- begin doc-metadata -->
+<div id="doc-metadata">
+<h2 class="title toc-ignore" style="display:none;">t-tests</h2>
+</div>
+<!-- end doc-metadata -->
+
+</div> <!-- bandContent.topicsListContainer -->
+</div> <!-- band -->
+</div> <!-- topicsPositioner -->
+</div> <!-- topicsContainer -->
+
+
+</div> <!-- bandContent page -->
+</div> <!-- pageContent band -->
+
+
+
+
+<script>
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+
+</body>
+
+</html>

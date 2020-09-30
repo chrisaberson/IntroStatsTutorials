@@ -1,0 +1,454 @@
+---
+title: "t-tests"
+output: learnr::tutorial
+runtime: shiny_prerendered
+description: >
+  One sample, independent samples, and paired t-tests, effect sizes
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(knitr)
+library(ggplot2)
+library(IntroStatsTutorials)
+load(file="G:/My Drive/IntroStatsTutorials/data/denial2.RData")
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# t-tests
+
+## Overview
+
+This tutorial focuses on three forms of the t-test, one of the real workhorse statistics in psychology. We will introduce the one sample t first then move to the more common applications - independent and paired samples. 
+
+The PowerPoint slides for the presentation in the videos are on Canvas if you want a standalone copy. 
+
+The videos (as well as others) can also be found on my YouTube channel https://www.youtube.com/channel/UC5kDZTyHZlgSgSEa3YQXOi
+
+### Learning Objectives
+
+Identify the three forms of t-test
+
+Explain the conditions for applying each t-test
+
+Compute 95% confidence intervals and t-tests
+
+Given a problem, define the null and alternative hypotheses
+
+Apply the above procedures to making decisions about null hypotheses
+
+Describe and calculate Cohen's d as a measure of effect size
+
+## Data
+
+*denial* is the datafile used in exercises. These data examine relationships between climate denial and a variety of other beliefs. 
+
+Jylhä, K. M., & Hellmer, K. (in press). Right-wing populism and climate change denial: The roles of exclusionary and anti-egalitarian preferences, conservative ideology, and antiestablishment attitudes. *Analyses of Social Issues and Public Policy*. https://doi.org/10.1111/asap.12203
+
+The datafile includes the variables **CCD** (Climate Change denial), **ANTIESTABL** (Anti Establishment Beliefs), **EXCL_ANTIEG** (anti egalitarian preferences), **TRADVALUE** (traditional values), **OPENNESS** (openness to new experiences), **PSEUDOSCI** (pseudoscience beliefs), and **AGREEABL** (agreeableness), **AGE** (age in years), **Gender** (three categories), **Education** (5 categories, and **ed** (education split into college grads vs. non grads)
+
+*yoga* is a datafile with two variables that pre-intervention depression (**preBDI**) to post-intervention depression (**postBDI**). These data represent a test of the effectiveness of yoga on veteran's depression. 
+
+Zaccari, B., Callahan, M. L., Storzbach, D., McFarlane, N., Hudson, R., & Loftis, J. M. (2020). Yoga for veterans with PTSD: Cognitive functioning, mental health, and salivary cortisol. *Psychological Trauma: Theory, Research, Practice, and Policy*. https://doi-org.ezproxy.humboldt.edu/10.1037/tra0000909.supp (Supplemental)
+
+### Packages 
+
+This tutorial uses the following new packages:
+
+* `lsr` for effect sizes
+* `BayesFactor` for Bayes Factors
+
+## Video 1 Introduction to t-tests 
+
+![Video 1: Introduction](https://youtu.be/AfsjyKmR6kY)
+
+## Quiz 1 
+
+```{r quiz1, ECHO=F}
+learnr::quiz(
+  learnr::question("t-test address a specific limitation of the z-test. Identify the limitation.",
+    learnr::answer("We rarely know the population standard deviation", correct = TRUE),
+    learnr::answer("We rarely know the sample standard deviation"),
+    learnr::answer("The normal distribution does not exist"),
+    learnr::answer("z-tests are super hard to calculate"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("The independent samples t-test is used when we want to ...  ",
+    learnr::answer("Compare means between two groups of different people", correct = TRUE),
+    learnr::answer("Compare means between one group of people measured at two time points"),
+    learnr::answer("Estimate the population standard deviation"),
+    learnr::answer("Compare one group to a hypothesized mean"),
+    correct = "Correct.",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  ),
+  learnr::question("The paired samples t-test is used when we want to ...  ",
+    learnr::answer("Compare means between two groups of different people"),
+    learnr::answer("Compare means between one group of people measured at two time points", correct = TRUE),
+    learnr::answer("Estimate the population standard deviation"),
+    learnr::answer("Compare one group to a hypothesized mean"),    
+    correct = "Correct.",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  )
+)
+
+``` 
+
+## Video 2 One Sample t
+
+![](https://youtu.be/JUcjIWLZkMA)
+
+## Quiz 2 
+
+```{r quiz2, ECHO=F}
+learnr::quiz(
+  learnr::question("The one sample t is used to ... ",
+    learnr::answer("Compare means between two groups of different people"),
+    learnr::answer("Compare means between one group of people measured at two time points"),
+    learnr::answer("Estimate the population standard deviation"),
+    learnr::answer("Compare one group to a hypothesized mean", correct = TRUE),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("The Stanford-Binet IQ test is known to produce a population mean of 100. You are interested in whether students at 'elite' colleges are actually smarter than average. Your sample 200 students and obtain a sample mean of 102, **t**(199) = 1.90, **p**=.06. What is the null hypothesis?",
+    learnr::answer("The population mean (mu) = 100", correct = TRUE),
+    learnr::answer("The population mean (mu) = 102"),
+    learnr::answer("The sample mean = 100"),
+    learnr::answer("The sample mean = 102"),
+    correct = "Correct! Null hypotheses always focus on population means",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("The Stanford-Binet IQ test is known to produce a population mean of 100. You are interested in whether students at 'elite' colleges are actually smarter than average. Your sample 200 students and obtain a sample mean of 102, **t**(199) = 1.90, **p**=.06. What is your conclusion about the null hypothesis in plain English?",
+    learnr::answer("Students at elite colleges do not appear to differ in terms of IQ from the general population", correct = TRUE),
+    learnr::answer("Students at elite colleges have higher IQs than the general population"),
+    learnr::answer("Students at elite colleges are spoiled rich kids"),
+    learnr::answer("Elite colleges ain't so elite"),
+    correct = "Correct! Here because p > .05, we reject the null hypothesis.",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+
+``` 
+
+
+## Video 3: t-test III Independent Samples t
+
+![](https://youtu.be/HAOEli_bqWg)
+
+## Quiz 3
+
+
+```{r quiz3, ECHO=F}
+learnr::quiz(
+  learnr::question("Independent in the context of the t-test means ...  ",
+    learnr::answer("free from outside control"),
+    learnr::answer("not depending on another's authority"),
+    learnr::answer("different people in two groups", correct = TRUE),
+    learnr::answer("None of the above"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("One group of people received a COVID-19 vaccine and a second group of people received a shot without the vaccine (control group). Two weeks later, their levels of Covid antibodies were measured. An effective vaccine would require a strong increase in the presence of antibodies. A t-test comparing the groups produced **t**(1998)=14.8, **p**<.001 with the mean for the group who got the vaccine being 30 AU/ml and the mean for those who did not was 2 AU/ml. What is the null hypothesis?",
+    learnr::answer(sprintf("$\\mu = 0$")),
+    learnr::answer(sprinf("$\\mu_1-\\mu_2=0$"), correct = TRUE),
+    learnr::answer(sprinf("$\\mu_1-\\mu_2=28$")),
+    learnr::answer(sprinf("$\\mu_1-\\mu_2=2$")),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("One group of people received a COVID-19 vaccine and a second group of people received a shot without the vaccine (control group). Two weeks later, their levels of Covid antibodies were measured. An effective vaccine would require a strong increase in the presence of antibodies. A t-test comparing the groups produced **t**(1998)=14.8, **p**<.001 with the mean for the group who got the vaccine being 30 AU/ml and the mean for those who did not was 2 AU/ml. What is the correct interpretation of these values?",
+    learnr::answer("The population mean is unlikely to be 0"),
+    learnr::answer("The group receiving the vaccine had a stronger antibody response than the group that did not", correct = TRUE),
+    learnr::answer("The vaccine don't work"),
+    learnr::answer("Vaccines cause autism"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+
+``` 
+
+## Video IV Effect Size
+
+
+![](https://youtu.be/CvXFFdILEJA)
+
+## Quiz 4 
+
+```{r quiz4, ECHO=F}
+learnr::quiz(
+  learnr::question("The measure of effect size discussed in the video is ... ",
+    learnr::answer("Cohen's d", correct = TRUE),
+    learnr::answer("Cohen's t"),
+    learnr::answer("eta squared"),
+    learnr::answer("omega squared"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("The effect size measures",
+    learnr::answer("The magnitude of differences between two groups", correct = TRUE),
+    learnr::answer("Whether we can say two groups differ"),
+    learnr::answer("The size of the effect"),
+    learnr::answer("The null hypothesis"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+``` 
+
+## Video V Examples from the literature
+
+
+![](https://youtu.be/r12J7R6JdD4)
+
+## Exercise
+
+The following examples use the *denial2* data. To facilitate t-test, I have removed transgendered people from these data as there are two few to analyze. 
+
+The code for the independent samples t places the dependent variable (the variable that is interval/ratio) on the left and the dichotomous variable on the right. The code is largely identical to the format we used for regression. 
+
+```{r}
+t.test(denial2$CCD~denial2$Gender)
+```
+
+The *lsr* package computes a variety of effect sizes. The format is similar to the t-test but the command is different. This is the first time we've used a package. The lsr:: piece lets R know you are using something from a package. CohensD is the command.  
+
+```{r}
+lsr::cohensD(denial2$CCD~denial2$Gender)
+```
+
+
+Run a t-test comparing climate change denial **CCD** for those with and without college educations **ed**. Obtain an effect size for the relationship. 
+
+```{r ex1, exercise = TRUE, exercise.lines = 2}
+
+```
+
+```{r ex1-solution}
+t.test(denial2$CCD~denial2$ed)
+lsr::cohensD(denial2$CCD~denial2$ed)
+```
+
+## Quiz 5
+
+```{r}
+t.test(denial2$CCD~denial2$ed)
+lsr::cohensD(denial2$CCD~denial2$ed)
+```
+
+The following questions refer to the analyses you just ran. Results are reproduced above for your convenience. 
+
+```{r quiz6, ECHO=F}
+learnr::quiz(
+  learnr::question("What is the null hypothesis?",
+    learnr::answer(sprintf("$\\mu_1-\\mu_2=0$"), correct = TRUE),
+    learnr::answer(sprintf("$\\mu_1-\\mu_2\\neq0$")),
+    learnr::answer(sprintf("$\\mu=0$")),
+    learnr::answer("none of these"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+ learnr::question("What is your conclusion about the null hypothesis?",
+    learnr::answer("Fail to reject the null", correct = TRUE),
+    learnr::answer("Reject the null"),
+    learnr::answer("Accept the null"),
+    learnr::answer("It is wrong"),
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+ ,
+ learnr::question("The best plain English conclusion here would be",
+    learnr::answer("We have no evidence that education is related to climate change denial", correct = TRUE),
+    learnr::answer("More educated people show more climate change denial"),
+    learnr::answer("Less educated people show more climate change denial"),
+    learnr::answer("Educated and less educated differ in terms of climate change denial"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+``` 
+
+
+## Video VI Paired Samples t-test
+
+![](https://youtu.be/Pm0LTqLxI84)
+
+## Quiz 
+
+```{r quiz7, ECHO=F}
+learnr::quiz(
+  learnr::question("In the context of the t-test, 'paired' means",
+    learnr::answer("The same people measured twice", correct = TRUE),
+    learnr::answer("join or connect"),
+    learnr::answer("Different people measured in different conditions"),
+    learnr::answer("Different people measured in one condition"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+ learnr::question("The hypotheses and formulae for the paired t-test",
+    learnr::answer("Are the same as the independent samples t", correct = TRUE),
+    learnr::answer("Are different than the independent samples t"),
+    learnr::answer("Are the same as the one sample t"),
+    learnr::answer("There are no formulae and hypotheses"),
+    correct = "Correct! ",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+``` 
+
+## Exercise 
+
+```{r echo=FALSE}
+pre<-c(3,4,5,6,7,9)
+post<-c(6,5,7,8,9,10)
+pairedex<-as.data.frame(cbind(pre,post))
+```
+
+The following example uses a small dataset called *pairedex* to show the format of paired t analysis. The big difference between independent and paired t code is that paired uses a , in place of the ~ . 
+
+```{r}
+t.test(pairedex$pre,pairedex$post)
+lsr::cohensD(pairedex$pre,pairedex$post)
+```
+
+Using the data called *yoga*, perform a t-test comparing pre-intervention depression (**preBDI**) to post-intervention depression (**postBDI**).
+
+```{r ex2, exercise = TRUE, exercise.lines = 2}
+
+```
+
+```{r ex2-solution}
+t.test(yoga$preBDI,yoga$postBDI)
+lsr::cohensD(yoga$preBDI,yoga$postBDI)
+```
+
+## Quiz
+
+```{r }
+t.test(yoga$preBDI,yoga$postBDI)
+lsr::cohensD(yoga$preBDI,yoga$postBDI)
+```
+
+```{r quiz8, ECHO=F}
+learnr::quiz(
+  learnr::question("What is the null hypothesis?",
+    learnr::answer(sprintf("$\\mu_1-\\mu_2=0$"), correct = TRUE),
+    learnr::answer(sprintf("$\\mu_1-\\mu_2\\neq0$")),
+    learnr::answer(sprintf("$\\mu=0$")),
+    learnr::answer("none of these"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+ learnr::question("What is your conclusion about the null hypothesis?",
+    learnr::answer("Fail to reject the null", correct = TRUE),
+    learnr::answer("Reject the null"),
+    learnr::answer("Accept the null"),
+    learnr::answer("It is wrong"),
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+ ,
+ learnr::question("The best plain English conclusion here would be",
+    learnr::answer("Yoga appears to reduce depression", correct = TRUE),
+    learnr::answer("Yoga does not help reduce depression"),
+    learnr::answer("There is a correlation between depression at pretest and posttest"),
+    learnr::answer("Yoga makes depression worse"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+``` 
+
+## Video VII New Directions
+
+![](https://youtu.be/-rSdHv8Px34)
+
+## Quiz 
+```{r quiz9, ECHO=F}
+learnr::quiz(
+  learnr::question("A Bayes Factor can provide evidence for ...",
+    learnr::answer("Both the null and the alternative hypotheses", correct = TRUE),
+    learnr::answer("The null"),
+    learnr::answer("The alternative"),
+    learnr::answer("None of the above"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+ learnr::question("The proposed new standard for alpha is ...",
+    learnr::answer(".005", correct = TRUE),
+    learnr::answer(".05"),
+    learnr::answer(".01"),
+    learnr::answer(".50"),
+    correct = "Correct! ",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+``` 
+
+## Exercise 
+
+The code below uses the *BayesFactor* package to produce a value. 
+```{r}
+BayesFactor::ttestBF(formula=CCD~Gender, data=denial2)
+```
+
+### Exercise
+
+Adapt the code above to run a Bayes Factor for predicting climate change denial (**CCD**) from education (**ed**).
+
+```{r ex3, exercise = TRUE, exercise.lines = 1}
+
+```
+
+```{r ex3-solution}
+BayesFactor::ttestBF(formula=CCD~ed, data=denial2)
+```
+
+##
+Congratulations! You've reached the end of the tutorial. Here is what you need to do to obtain credit. Take the completion token below and copy it. Open Canvas as go to the assignment called t-test tutorial. Enter your token!
+
+
+```{r echo=F}
+stringi::stri_rand_strings(1, 5, pattern = "[A-Za-z0-9]")
+```
+

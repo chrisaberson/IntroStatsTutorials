@@ -1,0 +1,459 @@
+---
+title: "Sampling Distributions and Null Hypothesis Signficance Testing"
+output: learnr::tutorial
+runtime: shiny_prerendered
+description: >
+  Sampling distributions of the mean, NHST, Confidence Intervals, z-tests
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(knitr)
+library(ggplot2)
+library(IntroStatsTutorials)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Sampling Distributions and NHST
+
+## Overview
+
+This tutorial focuses on sampling distributions and null hypothesis signficance testing (NHST). This is singluraly the most theoretically important section in this course. This stuff is the basis for inferential statistics. 
+
+The PowerPoint slides for the presentation in the videos are on Canvas if you want a standalone copy. 
+
+The videos (as well as others) can also be found on my YouTube channel https://www.youtube.com/channel/UC5kDZTyHZlgSgSEa3YQXOi
+
+### Learning Objectives
+
+Describe how sample means are distributed 
+
+List factors that affect the distribution of sample means
+
+Compute 95% confidence intervals and z-tests
+
+Given a problem, define the null and alternative hypotheses
+
+Apply the above procedures to making decisions about null hypotheses
+
+Get a tatoo that reads "95% Confidence Intervals 4 Ever"
+
+## Video 1 Introduction to Sampling Distributions 
+
+![Video 1: Introduction](https://youtu.be/Tn1hHNvI9jY)
+
+## Quiz 1 
+
+```{r quiz1, ECHO=F}
+learnr::quiz(
+  learnr::question("Inferential statistics are used to draw conclusions about ______ based on ______",
+    learnr::answer("Populations, Samples", correct = TRUE),
+    learnr::answer("Samples, Populations"),
+    learnr::answer("People, Data"),
+    learnr::answer("Cats, Dogs"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("2016 Election Polling was .... ",
+    learnr::answer("Accurate", correct = TRUE),
+    learnr::answer("Incorrect"),
+    learnr::answer("I don't want to think about the 2016 election"),
+    learnr::answer("Really, really wrong"),
+    correct = "Correct.",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  ),
+  learnr::question("The estimate that gives us the most information about the precision of a statistical value is ... ",
+    learnr::answer("The margin of error", correct = TRUE),
+    learnr::answer("The mean"),
+    learnr::answer("The percentage"),
+    learnr::answer("The standard deviation"),
+    correct = "Correct.",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  )
+)
+
+``` 
+
+## Video 2 Calculating Expected Proportions
+
+![](https://youtu.be/TLkgI0qXsOs)
+
+## Quiz 2 
+
+```{r quiz2, ECHO=F}
+learnr::quiz(
+  learnr::question("For a population with a mean of 4 and a standard deviation of 4, how many sample means of size n = 16 would you expect to be between 3 and 4",
+    learnr::answer("About 64%", correct = TRUE),
+    learnr::answer("Nearly all"),
+    learnr::answer("Very few"),
+    learnr::answer("95%"),
+    correct = "Correct! These values would convert to z scores of -1 and 1",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("The standard error of the mean is a function of ...",
+    learnr::answer("Sample size and standard deviation", correct = TRUE),
+    learnr::answer("Standard Deviation"),
+    learnr::answer("Sample size"),
+    learnr::answer("The mean"),
+    correct = "Correct! The standard error is simply the standard deviation over the square root of sample size",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("For which sample size would you expect means to be closer to the population mean ...",
+    learnr::answer("n=100", correct = TRUE),
+    learnr::answer("n=10"),
+    learnr::answer("n=30"),
+    learnr::answer("n=50"),
+    correct = "Correct! Larger sample sizes produce sample means that tend to be closer to the population mean",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+
+``` 
+
+
+## Video 3: Demonstration
+
+![](https://youtu.be/_jGBaAFahUo)
+
+## Quiz 3
+
+
+```{r quiz3, ECHO=F}
+learnr::quiz(
+  learnr::question("Our demonstation showed that ... ",
+    learnr::answer("The normal distribution is a myth"),
+    learnr::answer("I wasn't paying attention"),
+    learnr::answer("The normal distribution really does tell us what is going to happen", correct = TRUE),
+    learnr::answer("None of the above"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("In our demonstation our calculation estimates and the actual sample mean distribution were ... ",
+    learnr::answer("Very Different"),
+    learnr::answer("Similar", correct = TRUE),
+    learnr::answer("Not different or similar"),
+    learnr::answer("None of the above"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+
+``` 
+
+## Your turn to do a sampling demonstation
+$\huge z=\frac{x-\bar{x}}{\sigma / \sqrt{n}}$
+
+```{r}
+knitr::include_app("https://pwr2ppl.shinyapps.io/SamplingDistributions/?_ga=2.25292350.208143462.1600882442-1653652069.1599694463",height="600px")
+```
+
+This example uses a population with a mean of 2.5 and a standard deviation of 1. 
+
+For a sample size of n = 16, calculate the proportion of means you expect to fall between 2.2 and 2.8.
+
+Use the app to draw samples of n = 16. Do this a few times. Is it always the same result or does it differ slightly for each sample? 
+
+## Video IV Hypothesis Testing Introduction
+
+
+![](https://youtu.be/T4pSyn9w4Og)
+
+## Quiz 4 
+
+```{r quiz4, ECHO=F}
+learnr::quiz(
+  learnr::question("If I were guessing black or red for each card, what would you expect to be the most common outcome?",
+    learnr::answer("Five correct", correct = TRUE),
+    learnr::answer("Four correct"),
+    learnr::answer("Zero correct"),
+    learnr::answer("10 correct"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("If I were guessing black or red for each card, which result would be the most suprising?",
+    learnr::answer("Zero correct", correct = TRUE),
+    learnr::answer("Nine correct"),
+    learnr::answer("Five correct"),
+    learnr::answer("Three correct"),
+    correct = "Correct! Getting zero correct is the least likely outcome listed",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+``` 
+
+## Video IV Formal Terms
+
+![](https://youtu.be/_8yxTscGnv8)
+
+## Quiz 5
+```{r quiz5, ECHO=F}
+learnr::quiz(
+  learnr::question("The null hypothesis reflects ...",
+    learnr::answer("A formal prediction of no effect", correct = TRUE),
+    learnr::answer("A formal prediction of an effect"),
+    learnr::answer("Nothing. Because null means nothing."),
+    learnr::answer("A not guilty plea"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+ learnr::question("The alternative hypothesis is ...",
+    learnr::answer("The opposite of the null hypothesis", correct = TRUE),
+    learnr::answer("Another name for the null hypothesis"),
+    learnr::answer("The hypothesis preferred by alternative music fans"),
+    learnr::answer("Another name for alpha level"),
+    correct = "Correct! ",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+ ,
+ learnr::question("The alpha level is ... ",
+    learnr::answer("The level of probability we need to reach to reject the null hypothesis", correct = TRUE),
+    learnr::answer("The same as the beta level"),
+    learnr::answer("The value we must match to reject the null hypothesis"),
+    learnr::answer("Much worse than the Gamma level"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+``` 
+
+
+## Video V Errors
+
+![](https://youtu.be/57QRJ-ftysU)
+
+## Quiz 6
+
+```{r quiz6, ECHO=F}
+learnr::quiz(
+  learnr::question("When we fail to reject a null hypothesis that is actually false, we have made a ...",
+    learnr::answer("Type II Error", correct = TRUE),
+    learnr::answer("Type I Error"),
+    learnr::answer("Alpha error"),
+    learnr::answer("Mistake"),
+    correct = "Correct! A Type II error is a false negative!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+ learnr::question("If we reject a true null hypothesis we have made a",
+    learnr::answer("Alpha Error", correct = TRUE),
+    learnr::answer("Type II Error"),
+    learnr::answer("Beta error"),
+    learnr::answer("Mistake"),
+    correct = "Correct! ",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+ ,
+ learnr::question("Typically, we reject a null hypothesis when our probability is  ... ",
+    learnr::answer("Less than .05", correct = TRUE),
+    learnr::answer("Greater than .05"),
+    learnr::answer("Exactly .05"),
+    learnr::answer("Probability has nothing to do with this."),
+    correct = "Correct! ",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+``` 
+
+
+## Video VI Calculations and Application
+
+![](https://youtu.be/E3amhoxp12A)
+
+## Quiz 7
+
+$\huge \sigma_\bar{x} = \frac{\sigma}{\sqrt{n}}$
+
+$\huge 95\% CI = \bar{x} \pm (z_{.95})(\sigma_\bar{x})$
+
+The Bayley Scale of infant development is a widely used measure of cognitive, motor, and behavioral development of infants and young children. Use with a large number of infants (well over 10,000) established the population mean as 100 with a standard deviation of 15. You are interested in whether students whose mothers received regular prenatal care (e.g., completed monthly medical visits) show improved development scores. The researcher takes a sample of 30 infants born from parents who completed regular prenatal care, those infants produced M = 102 and a SD = 16.
+
+```{r quiz7, ECHO=F}
+learnr::quiz(
+  learnr::question("The null hypothesis would be ...",
+    learnr::answer("Infants who had regular prenatal care have a mean of 100", correct = TRUE),
+    learnr::answer("Infants who had regular prenatal care have a mean greater than 100"),
+    learnr::answer("Infants who had regular prenatal care have a mean less than 100"),
+    learnr::answer("None of the above"),
+    correct = "Correct! We always begin with a null assumption. In this case we expect these kids to be just like everyone else",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+ learnr::question("What is the 95% Confidence Interval",
+    learnr::answer("96.2 to 107.7", correct = TRUE),
+    learnr::answer("101.0 to 103.0"),
+    learnr::answer("94.3 to 105.7"),
+    learnr::answer("90 to 110"),
+    correct = "Correct! ",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+ ,
+ learnr::question("What is your conclusion about the null hypothesis?",
+    learnr::answer("Fail to reject the null", correct = TRUE),
+    learnr::answer("Reject the null"),
+    learnr::answer("Accept the null"),
+    learnr::answer("It is wrong"),
+    correct = "Correct! The value in the null falls inside our confidence intervals so we fail to reject it. When we fail to reject it is because our sample result would not be surprising if the null were true.",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+``` 
+
+
+## Video VIII Using R
+
+![](https://youtu.be/lMoJnwqy3mE)
+
+## Exercise
+
+```{r echo=FALSE}
+z.test <- function(m, n , mu, sigma){
+   cill = (m-(1.96*(sigma/sqrt(n))))
+   ciul = (m+(1.96*(sigma/sqrt(n))))
+   z = (m - mu) / (sigma/sqrt(n))
+   p = (1-pnorm(abs(z)))*2
+   return(list(CI95PCT= c(cill, ciul), z=z, p=p))
+}
+```
+
+The Bayley Scale of infant development is a widely used measure of cognitive, motor, and behavioral development of infants and young children. Use with a large number of infants (well over 10,000) established the population mean as 100 with a standard deviation of 15. You are interested in whether students whose mothers received regular prenatal care (e.g., completed monthly medical visits) show improved development scores. The researcher takes a sample of 30 infants born from parents who completed regular prenatal care, those infants produced M = 102 and a SD = 16.
+
+To perform calculations using R, we need the function z.test (I have already made this active). We simply provide sample mean (m), hypothesized population mean (mu), sample size(n), and standard deviation (s). For our previous example we would use the following.
+
+```{r EVAL=F, echo=T}
+z.test(m=102,n=30,mu=100,s=16)
+```
+
+Another researcher argues that prenatal care is only effective in improving physical development (i.e., motor development). That research used the Alberta Infant Motor Scale. The scale authors report a mean of 50 and a standard deviation of 16 for 8 month old children. The researcher takes a sample of 50 infants born from parents who completed regular prenatal care, those infants produces a M = 55.
+
+```{r ex1, exercise = TRUE, exercise.lines = 1}
+
+```
+
+```{r ex1-solution}
+z.test(m=55,n=50,mu=50,s=16)
+```
+
+### Quiz 8
+
+```{r quiz8, ECHO=F}
+learnr::quiz(
+  learnr::question("What is your conclusion about the null hypothesis",
+    learnr::answer("Reject", correct = TRUE),
+    learnr::answer("Fail to Reject"),
+    learnr::answer("Accept"),
+    learnr::answer("Fail to Accept"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+ learnr::question("Which option reflect the best conclusion drawn from these data",
+    learnr::answer("Infants who received prenatal care have better than average motor skills", correct = TRUE),
+    learnr::answer("Infants who received prenatal care differ from those that did not"),
+    learnr::answer("Infants who received prenatal care do not differ from those that did not"),
+    learnr::answer("We made a Type I error"),
+    correct = "Correct! ",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+ ,
+ learnr::question("If it were actually the case in the population that infants who received prenatal care have the same motor development as those that did not, our results would represent",
+    learnr::answer("A Type I Error", correct = TRUE),
+    learnr::answer("A Type II Error"),
+    learnr::answer("A Type III Error"),
+    learnr::answer("Both a Type I Error and a Type II Error"),
+    correct = "Correct! ",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+``` 
+
+## Video IX Power and Other Issues 
+
+![](https://youtu.be/0cGeAHgZJ_s)
+
+## Quiz 9
+
+```{r quiz9, ECHO=F}
+learnr::quiz(
+  learnr::question("What is power?",
+    learnr::answer("The probability of rejecting a false null hypothesis", correct = TRUE),
+    learnr::answer("The probability of not rejecting a false null hypothesis"),
+    learnr::answer("the probability of accepting the null hypothesis"),
+    learnr::answer("he probability of rejecting the  null hypothesis"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+ learnr::question("Which of the following does not influence power",
+    learnr::answer("All of those", correct = TRUE),
+    learnr::answer("Alpha"),
+    learnr::answer("Effect Size"),
+    learnr::answer("Sample Size"),
+    correct = "Correct! ",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+ ,
+ learnr::question("Who wrote the best book on Statistical Power",
+    learnr::answer("Chris Aberson", correct = TRUE),
+    learnr::answer("Jacob Cohen"),
+    learnr::answer("Kevin Murphy"),
+    learnr::answer("Christine Blasey"),
+    correct = "Correct! Fun fact! Christine Blasey is the woman who now Supreme Court Justice Brett Kavanaugh sexually assualted. She also wrote a book on statistical power. These things are likely not related as Justice Kavanaugh did not sexually assault me, or to the best of my knowledge, any of the other authors listed above. He still sucks though.",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+``` 
+
+##
+Congratulations! You've reached the end of the tutorial. Here is what you need to do to obtain credit. Take the completion token below and copy it. Open Canvas as go to the assignment called NHST tutorial. Enter your token!
+
+
+```{r echo=F}
+stringi::stri_rand_strings(1, 5, pattern = "[A-Za-z0-9]")
+```
+

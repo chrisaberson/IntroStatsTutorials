@@ -1,0 +1,421 @@
+---
+title: "One Factor ANOVA"
+output: learnr::tutorial
+runtime: shiny_prerendered
+description: >
+  One Factor ANOVA and effect size
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(knitr)
+library(lsr)
+library(car)
+library(IntroStatsTutorials)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# One Factor ANOVA
+
+## Overview
+
+This tutorial focuses on the one factor ANOVA. 
+
+The PowerPoint slides for the presentation in the videos are on Canvas if you want a standalone copy. 
+
+The videos (as well as others) can also be found on my YouTube channel https://www.youtube.com/channel/UC5kDZTyHZlgSgSEa3YQXOi
+
+### Learning Objectives
+
+Define between subjects and within subjects
+
+Explain the conditions for applying the One Factor ANOVA
+
+Compute Sums of Squares, degrees of freedom, Mean Square, and F
+
+Given a problem, define the null and alternative hypotheses
+
+Apply the above procedures to making decisions about null hypotheses
+
+Describe and calculate eta-squared as a measure of effect size
+
+Understand the equivalence of ANOVA and linear regression
+
+Use R to compute ANOVA and eta-squared
+
+Tell all your friends about Sums of Squares
+
+## Data
+
+*denial* is the datafile used in exercises. These data examine relationships between climate denial and a variety of other beliefs. 
+
+Jylhä, K. M., & Hellmer, K. (in press). Right-wing populism and climate change denial: The roles of exclusionary and anti-egalitarian preferences, conservative ideology, and antiestablishment attitudes. *Analyses of Social Issues and Public Policy*. https://doi.org/10.1111/asap.12203
+
+The datafile includes the variables **CCD** (Climate Change denial), **ANTIESTABL** (Anti Establishment Beliefs), **EXCL_ANTIEG** (anti egalitarian preferences), **TRADVALUE** (traditional values), **OPENNESS** (openness to new experiences), **PSEUDOSCI** (pseudoscience beliefs), and **AGREEABL** (agreeableness), **AGE** (age in years), **Gender** (three categories), **Education** (5 categories, and **ed** (education split into college grads vs. non grads)
+
+*condom* is a datafile used in examples. It contains a variable indicating condition (**CONDITIO**) and one indicating number of condoms purchased (**CONDOM**).
+
+### Packages 
+
+This tutorial uses the following new packages:
+
+* `lsr` for effect sizes
+* `car` for ANOVA computations
+
+## Video 1 Introduction to ANOVA
+
+![Video 1: Introduction](https://youtu.be/v0af9vhGayU)
+
+## Quiz 1 
+
+```{r quiz1, ECHO=F}
+learnr::quiz(
+  learnr::question("Between subjects means ...",
+    learnr::answer("Different people in each group", correct = TRUE),
+    learnr::answer("The same people in each group"),
+    learnr::answer("Things participants say to each other"),
+    learnr::answer("The partition in a research lab"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("The primary advantage of ANOVA over the t-test is ...  ",
+    learnr::answer("It can handle comparisons between more than just two groups", correct = TRUE),
+    learnr::answer("It is more accurate than the t-test"),
+    learnr::answer("It is simpler to calculate"),
+    learnr::answer("It is fancier"),
+    correct = "Correct.",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  ),
+  learnr::question("The only thing Pearson and Fisher could agree on was ...  ",
+    learnr::answer("Racial injustice must end"),
+    learnr::answer("White people are superior", correct = TRUE),
+    learnr::answer("Black Lives Matter"),
+    learnr::answer("Justice for Breonna Taylor"),    
+    correct = "Correct. Just like Pearson, Fisher was also a racist. Ya sensing a trend here?",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  )
+)
+
+``` 
+
+## Video 2 One Factor ANOVA Calculations
+
+![](https://youtu.be/FOadtj-1n2M)
+
+## Exercise
+
+$\huge SS_{Total}=\Sigma(x-\bar{x}_t)^2$
+$\huge SS_{Between}=\Sigma n_j(\bar{x}_j-\bar{x}_t)^2$
+$\huge SS_{Within}=\Sigma(x-\bar{x}_j)^2$
+
+```{r echo=FALSE}
+group<-c("one","one","one","two","two","two","three","three","three")
+x<-c(2,4,6,4,6,8,6,8,16)
+xx<-as.data.frame(cbind(group,x))
+xx$group<-as.factor(xx$group)
+xx$x<-as.numeric(xx$x)
+knitr::kable(xx)
+```
+
+
+```{r quiz3, ECHO=F}
+learnr::quiz(
+  learnr::question("What is SS Total? ",
+    learnr::answer("6"),
+    learnr::answer("56"),
+    learnr::answer("76"),
+    learnr::answer("132", correct = TRUE),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+     learnr::question("What is SS Between? ",
+    learnr::answer("6"),
+    learnr::answer("56", correct = TRUE),
+    learnr::answer("76"),
+    learnr::answer("132"),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+   learnr::question("What is SS Within?",
+    learnr::answer("6"),
+    learnr::answer("56"),
+    learnr::answer("76", correct = TRUE),
+    learnr::answer("132"),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+) ,
+   learnr::question("What is df between?",
+    learnr::answer("6"),
+    learnr::answer("56"),
+    learnr::answer("2", correct = TRUE),
+    learnr::answer("132"),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+   learnr::question("What is df Within?",
+    learnr::answer("2"),
+    learnr::answer("56"),
+    learnr::answer("6", correct = TRUE),
+    learnr::answer("132"),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+
+```
+
+
+## Exercise 2 More Calculations
+
+$SS_{Total}=132$  
+$SS_{Between}=56$  
+$SS_{Within}=76$  
+$df_{Between}=2$  
+$df_{Within}=6$  
+
+$\huge MS_{Between}=\frac{SS_{Between}}{df_{Between}}$  
+
+$\huge MS_{Within}=\frac{SS_{Within}}{df_{Within}}$  
+
+$\huge F = \frac{MS_{Between}}{MS_{Within}}$  
+
+$\huge \eta^2=\frac{SS_{Between}}{SS_{Total}}$
+
+```{r quiz2, ECHO=F}
+learnr::quiz(
+ learnr::question("What is MS Between? ",
+    learnr::answer("3"),
+    learnr::answer("28", correct = TRUE),
+    learnr::answer("12"),
+    learnr::answer("132"),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+   learnr::question("What is MS Within?",
+    learnr::answer("6"),
+    learnr::answer("28"),
+    learnr::answer("12", correct = TRUE),
+    learnr::answer("132"),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+),
+   learnr::question("What is F?",
+    learnr::answer("6"),
+    learnr::answer("4"),
+    learnr::answer("2.33", correct = TRUE),
+    learnr::answer("1"),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+   learnr::question("What is eta-squared?",
+    learnr::answer(".20"),
+    learnr::answer(".58"),
+    learnr::answer(".42", correct = TRUE),
+    learnr::answer("1.32"),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+
+``` 
+
+
+## Video 3 ANOVA in Published Studies
+
+![](https://youtu.be/jTGtLsDNhgs)
+
+## Quiz drawing conclusions 
+
+The code below uses the 1-pf command to obtain a probability for ANOVA. The first value is F, the 2nd is df between, and the third is df within. 
+
+1-pf(2.33,2,6)
+```{r ECHO=TRUE}
+1-pf(2.33,2,6)
+```
+
+```{r quiz4, ECHO=F}
+learnr::quiz(
+ learnr::question("What is the null hypothesis ",
+    learnr::answer(sprintf("$H_0:\\mu_1-\\mu_2=0$")),
+    learnr::answer(sprintf("$H_0:\\mu_1=\\mu_2=\\mu_3$"),correct = TRUE),
+    learnr::answer(sprintf("$H_0:\\mu_1\\neq\\mu_2\\neq\\mu_3$")),
+    learnr::answer("There is no null hypothesis"),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+   learnr::question("What is your decision about the null hypothesis?",
+    learnr::answer("Reject"),
+    learnr::answer("Accept"),
+    learnr::answer("Fail to Reject", correct = TRUE),
+    learnr::answer("To little information to decide"),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+),
+   learnr::question("What is the best interpretation given your conclusion?",
+    learnr::answer("There is a difference between the groups"),
+    learnr::answer("The groups means are exactly the same"),
+    learnr::answer("We have no evidence to suggest the group means differ", correct = TRUE),
+    learnr::answer("The Sums of Squares are large"),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+
+``` 
+
+## Video 4: ANOVA = Regression! 
+![](https://youtu.be/uXint34zjPQ)
+
+## Quiz
+```{r echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r quiz5, ECHO=F}
+learnr::quiz(
+ learnr::question("In ANOVA SS Between is equivalent to ______ in Regrssion?  ",
+    learnr::answer("SS Within"),
+    learnr::answer("SS Total"),
+    learnr::answer("SS Residual"),
+    learnr::answer("SS Regression",correct=TRUE),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+ learnr::question("In ANOVA SS Within is equivalent to ______ in Regrssion?  ",
+    learnr::answer("SS Within"),
+    learnr::answer("SS Total"),
+    learnr::answer("SS Residual",correct=TRUE),
+    learnr::answer("SS Regression"),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+),
+   learnr::question("In ANOVA the group means are equivalent to _____ in regression",
+    learnr::answer("Overall mean"),
+    learnr::answer("Residual"),
+    learnr::answer("predicted score", correct = TRUE),
+    learnr::answer("individual score"),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+
+``` 
+
+
+## Video 5: One Factor ANOVA in R
+
+![](https://youtu.be/pa0MZkZXXms)
+
+## Exercise 4
+
+The code below demonstrates how to run a one factor ANOVA using a dataset called *xx* with variables *group* and *x*. These are the values you used earlier for hand calculations. The first command runs the ANOVA and captures it in an object called ex1. The `lsr::etasquared` command uses the object that holds the ANOVA results.
+
+(Note: `lsr` is fussy. If the variables are not factor and numeric, you will get an error)
+
+```{r echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+ex1<-aov(xx$x~xx$group)
+summary(ex1)
+lsr::etaSquared(ex1)
+```
+
+### Exercise
+
+Using the *denial2* data, examine climate change denial (**CCD**) by education (**Education**). Be sure to get an effect size.
+
+```{r ex1, exercise = TRUE, exercise.lines = 3}
+
+```
+
+```{r ex1-solution}
+ex1<-aov(denial2$CCD~denial2$Education)
+summary(ex1)
+lsr::etaSquared(ex1)
+```
+
+## Quiz
+```{r echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r echo=FALSE}
+ex1<-aov(denial2$CCD~denial2$Education)
+summary(ex1)
+lsr::etaSquared(ex1)
+```
+
+
+```{r quiz6, ECHO=F}
+learnr::quiz(
+  learnr::question("What is your conclusion about the null hypothesis based on these results? ",
+    learnr::answer("Reject"),
+    learnr::answer("Accept"),
+    learnr::answer("Fail to Reject", correct = TRUE),
+    learnr::answer("To little information to decide"),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+),
+  learnr::question("What does this conclusion mean in plain English",
+    learnr::answer("More educated people show less climate change denial"),
+    learnr::answer("Education does not seem to be related to climate change denial", correct = TRUE),
+    learnr::answer("More educated people deny climate change more"),
+    learnr::answer("Climate change is not real"),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+
+``` 
+
+
+##
+Congratulations! You've reached the end of the tutorial. Here is what you need to do to obtain credit. Take the completion token below and copy it. Open Canvas as go to the assignment called ANOVA 1 Factor tutorial. Enter your token!
+
+
+```{r echo=F}
+stringi::stri_rand_strings(1, 5, pattern = "[A-Za-z0-9]")
+```
+
