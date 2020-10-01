@@ -12,6 +12,11 @@ To run a tutorial, use this code.
     run_tutorial("ct_dispersion", package = "IntroStatsTutorials")
     run_tutorial("normaldist", package = "IntroStatsTutorials")
     run_tutorial("correlation", package = "IntroStatsTutorials")
+    run_tutorial("regression", package = "IntroStatsTutorials")
+    run_tutorial("NHST", package = "IntroStatsTutorials")
+    run_tutorial("ttest", package = "IntroStatsTutorials")
+    run_tutorial("ANOVA 1F", package = "IntroStatsTutorials")
+
 
 After you run this code, the tutorial will open in a tab on your
 browser.
