@@ -1,0 +1,705 @@
+---
+title: "Two Factor ANOVA"
+output: learnr::tutorial
+runtime: shiny_prerendered
+description: >
+  Two Factor ANOVA, interactions, and effect size
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(knitr)
+library(lsr)
+library(car)
+library(ggplot2)
+library(IntroStatsTutorials)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Two Factor ANOVA
+
+## Overview
+
+This tutorial focuses on the two factor ANOVA with a particular emphasis on interpreting interactions. The tutorial also includes a brief section on NHST with correlation/regression designs. 
+
+The PowerPoint slides for the presentation in the videos are on Canvas if you want a standalone copy. 
+
+The videos (as well as others) can also be found on my YouTube channel https://www.youtube.com/channel/UC5kDZTyHZlgSgSEa3YQXOi
+
+### Learning Objectives
+
+Define the different types of Sums of Square in the two factor context
+
+Explain the conditions for applying the Two Factor ANOVA
+
+Compute Sums of Squares, degrees of freedom, Mean Square, and F
+
+Given a problem, define the null and alternative hypotheses
+
+Apply the above procedures to making decisions about null hypotheses
+
+Describe and calculate partial eta-squared as a measure of effect size
+
+Graph and interpret interaction effects 
+
+Use R to compute ANOVA and eta-squared
+
+Excitedly tell your parents about interaction effects
+
+Define and perform analyses testing hypothesis in correlation/regression 
+
+## Data
+
+*denial2* is the datafile used in exercises. These data examine relationships between climate denial and a variety of other beliefs. 
+
+Jylhä, K. M., & Hellmer, K. (in press). Right-wing populism and climate change denial: The roles of exclusionary and anti-egalitarian preferences, conservative ideology, and antiestablishment attitudes. *Analyses of Social Issues and Public Policy*. https://doi.org/10.1111/asap.12203
+
+The datafile includes the variables **CCD** (Climate Change denial), **ANTIESTABL** (Anti Establishment Beliefs), **EXCL_ANTIEG** (anti egalitarian preferences), **TRADVALUE** (traditional values), **OPENNESS** (openness to new experiences), **PSEUDOSCI** (pseudoscience beliefs), and **AGREEABL** (agreeableness), **AGE** (age in years), **Gender** (two categories), **Education** (5 categories, and **ed** (education split into college grads vs. non grads)
+
+*culture* is a datafile used in examples. It contains a variable indicating condition (**Condition**), region (**Region**) and one indicating testosterone increase (**Testosterone**).
+
+### Packages 
+
+This tutorial uses the following new packages:
+
+* `lsr` for effect sizes
+* `car` for ANOVA computations
+* `ggplot2` for graphing 
+
+## Video 1 Introduction to ANOVA
+
+![Video 1: Introduction](https://youtu.be/4NuQ9ec2xDE)
+
+## Quiz 1 
+
+```{r quiz1, ECHO=F}
+learnr::quiz(
+  learnr::question("The most important effect in factorial ANOVA usually is ... ",
+    learnr::answer("The interaction", correct = TRUE),
+    learnr::answer("The main effects"),
+    learnr::answer("The between subject"),
+    learnr::answer("The within subject "),
+    correct = "Correct!",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("What new sums squares value do we see in factorial ANOVA? ",
+    learnr::answer("SS A, SS B, and SS AxB", correct = TRUE),
+    learnr::answer("SS Factorial"),
+    learnr::answer("SS Between"),
+    learnr::answer("SS Within"),
+    correct = "Correct.",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  ),
+  learnr::question("Which of the following describes an interaction effect? ",
+    learnr::answer("The levels of A1 and A2 differ"),
+    learnr::answer("There is a differential effect of A across the levels of B", correct = TRUE),
+    learnr::answer("There is the same effect of A across the levels of B"),
+    learnr::answer("There is no difference between B1 and B2"),    
+    correct = "Correct.",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  )
+)
+
+``` 
+
+## Video 2 Interpreting Interactions
+
+![](https://youtu.be/LGcYuSg2O8M)
+
+## Quiz 
+
+```{r echo=FALSE}
+A<-c("A1","A1","A2","A2")
+B<-c("B1","B2","B1","B2")
+x<-c(2,2,4,4)
+xx<-as.data.frame(cbind(A,B,x))
+xx$A<-as.factor(xx$A)
+xx$B<-as.factor(xx$B)
+xx$x<-as.numeric(xx$x)
+library(ggplot2)
+bars <- ggplot(xx, aes(x=A, y=x, fill=B))
+bars + stat_summary(fun = mean, geom="bar", position="dodge")+ggtitle("Graph1")+coord_fixed(ratio = 0.5)
+
+x<-c(2,4,2,4)
+xx<-as.data.frame(cbind(A,B,x))
+xx$A<-as.factor(xx$A)
+xx$B<-as.factor(xx$B)
+xx$x<-as.numeric(xx$x)
+bars <- ggplot(xx, aes(x=A, y=x, fill=B))
+bars + stat_summary(fun = mean, geom="bar", position="dodge")+ggtitle("Graph2")+coord_fixed(ratio = 0.5)
+
+x<-c(2,6,2,4)
+xx<-as.data.frame(cbind(A,B,x))
+xx$A<-as.factor(xx$A)
+xx$B<-as.factor(xx$B)
+xx$x<-as.numeric(xx$x)
+
+bars <- ggplot(xx, aes(x=A, y=x, fill=B))
+bars + stat_summary(fun = mean, geom="bar", position="dodge")+ggtitle("Graph3")+coord_fixed(ratio = 0.5)
+```
+
+
+```{r quiz2, ECHO=F}
+learnr::quiz(
+  learnr::question("What effects does graph 1 represent? ",
+    learnr::answer("Interaction"),
+    learnr::answer("Main Effect Factor B"),
+    learnr::answer("No effects"),
+    learnr::answer("Main Effect Factor A", correct = TRUE),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+    learnr::question("What effects does graph 2 represent? ",
+    learnr::answer("Interaction"),
+    learnr::answer("Main Effect Factor B", correct = TRUE),
+    learnr::answer("No effects"),
+    learnr::answer("Main Effect Factor A"),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+    learnr::question("What effects does graph 3 represent? ",
+    learnr::answer("Interaction", correct = TRUE),
+    learnr::answer("Main Effect Factor B"),
+    learnr::answer("No effects"),
+    learnr::answer("Main Effect Factor A"),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+
+```
+
+## Video 3 Calculations
+
+![](https://youtu.be/eInQ6RfDmL0)
+
+
+## Exercise Calculations
+
+$\huge SS_{Total}=\Sigma(x-\bar{x}_t)^2$  
+$\huge SS_{Between}=\Sigma n_{cell}(\bar{x}_{cell}-\bar{x}_t)^2$  
+$\huge SS_{Within}=\Sigma(x-\bar{x}_{cell})^2$  
+$\huge SS_{A}=\Sigma n_{A}(\bar{x}_{A}-\bar{x}_t)^2$ 
+$\huge SS_{B}=\Sigma n_{B}(\bar{x}_{B}-\bar{x}_t)^2$ 
+$\huge SS_{AxB}=SS_{BG}-SS_{A}-SS_{B}$
+
+$\huge MS_{Between}=\frac{SS_{Between}}{df_{Between}}$  
+
+$\huge MS_{Within}=\frac{SS_{Within}}{df_{Within}}$  
+
+$\huge F = \frac{MS_{Between}}{MS_{Within}}$  
+
+$\huge \eta^2=\frac{SS_{Between}}{SS_{Total}}$
+
+$\huge MS_{A}=\frac{SS_{A}}{df_{A}}$  
+$\huge df_{A}=A-1$
+$\huge F_{A}=\frac{MS_A}{df_A}$
+$\huge MS_{B}=\frac{SS_{B}}{df_{B}}$  
+$\huge df_{B}=B-1$
+$\huge F_{B}=\frac{MS_B}{df_B}$
+$\huge MS_{AxB}=\frac{SS_{AxB}}{df_{AxB}}$  
+$\huge df_{AxB}=(A-1)(B-1)$
+$\huge F_{AxB}=\frac{MS_{AxB}}{df_{AxB}}$
+
+$\huge MS_{Within}=\frac{SS_{Within}}{df_{Within}}$  
+
+$\huge F = \frac{MS_{Between}}{MS_{Within}}$  
+
+$\huge \eta^2_A=\frac{SS_{A}}{SS_{Total}-SS_B-SS_{AxB}}$
+$\huge \eta^2_B=\frac{SS_{B}}{SS_{Total}-SS_A-SS_{AxB}}$
+$\huge \eta^2_{AxB}=\frac{SS_{AxB}}{SS_{Total}-SS_A-SS_{B}}$
+
+```{r}
+A<-c("A1","A1","A1","A1","A2","A2","A2","A2")
+B<-c("B1","B2","B1","B2","B1","B2","B1","B2")
+x<-c(2,4,4,6,8,10,12,14)
+xx<-as.data.frame(cbind(A,B,x))
+xx$A<-as.factor(xx$A)
+xx$B<-as.factor(xx$B)
+xx$x<-as.numeric(xx$x)
+knitr::kable(xx)
+```
+
+```{r quiz3, ECHO=F}
+learnr::quiz(
+ learnr::question("What is SS Between? ",
+    learnr::answer("106"),
+    learnr::answer("98", correct = TRUE),
+    learnr::answer("8"),
+    learnr::answer("20"),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+   learnr::question("What is SS Within?",
+    learnr::answer("106"),
+    learnr::answer("98"),
+    learnr::answer("8"),
+    learnr::answer("20", correct = TRUE),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+),
+   learnr::question("What is SS A?",
+    learnr::answer("106"),
+    learnr::answer("98", correct = TRUE),
+    learnr::answer("8"),
+    learnr::answer("20"),      
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+   learnr::question("What is SS B?",
+    learnr::answer("106"),
+    learnr::answer("98"),
+    learnr::answer("8", correct = TRUE),
+    learnr::answer("20"),      
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+learnr::question("What is SS A*B?",
+    learnr::answer("0", correct = TRUE),
+    learnr::answer("98"),
+    learnr::answer("8"),
+    learnr::answer("20"),      
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+learnr::question("What is F A?",
+    learnr::answer("19.6", correct = TRUE),
+    learnr::answer("1.6"),
+    learnr::answer("0"),
+    learnr::answer("20"),      
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+learnr::question("What is F B?",
+    learnr::answer("19.6"),
+    learnr::answer("1.6", correct = TRUE),
+    learnr::answer("0"),
+    learnr::answer("20"),      
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+learnr::question("What is F AxB?",
+    learnr::answer("19.6"),
+    learnr::answer("1.6"),
+    learnr::answer("0", correct = TRUE),
+    learnr::answer("20"),      
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+learnr::question("What is partial eta squared for B?",
+    learnr::answer(".83"),
+    learnr::answer(".00"),
+    learnr::answer(".29", correct = TRUE),
+    learnr::answer(".06"),      
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+
+``` 
+
+
+## Video 4 ANOVA Revisting Main Effects 
+
+![](https://youtu.be/zWWBA0mND8A)
+
+## Quiz Main Effects and Interactions  
+
+```{r }
+A<-c("A1","A1","A2","A2")
+B<-c("B1","B2","B1","B2")
+x<-c(2,2,2,4)
+xx<-as.data.frame(cbind(A,B,x))
+xx$A<-as.factor(xx$A)
+xx$B<-as.factor(xx$B)
+xx$x<-as.numeric(xx$x)
+library(ggplot2)
+bars <- ggplot(xx, aes(x=A, y=x, fill=B))
+bars + stat_summary(fun = mean, geom="bar", position="dodge")+ggtitle("Graph1")+coord_fixed(ratio = 0.5)
+
+x<-c(2,4,4,8)
+xx<-as.data.frame(cbind(A,B,x))
+xx$A<-as.factor(xx$A)
+xx$B<-as.factor(xx$B)
+xx$x<-as.numeric(xx$x)
+bars <- ggplot(xx, aes(x=A, y=x, fill=B))
+bars + stat_summary(fun = mean, geom="bar", position="dodge")+ggtitle("Graph2")+coord_fixed(ratio = 0.5)
+
+x<-c(10,10,8,4)
+xx<-as.data.frame(cbind(A,B,x))
+xx$A<-as.factor(xx$A)
+xx$B<-as.factor(xx$B)
+xx$x<-as.numeric(xx$x)
+
+bars <- ggplot(xx, aes(x=A, y=x, fill=B))
+bars + stat_summary(fun = mean, geom="bar", position="dodge")+ggtitle("Graph3")+coord_fixed(ratio = 0.5)
+```
+
+```{r quiz4, ECHO=F}
+learnr::quiz(
+ learnr::question("For graph 1 which main effects appear to be produced entirely by the interaction?",
+    learnr::answer("Main Effect of A"),
+    learnr::answer("Main Effect of B"),
+    learnr::answer("Both main effects",correct = TRUE),
+    learnr::answer("Neither main effects"),  
+    correct = "Correct! If the interaction was not present neither main effect would exist." ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+ learnr::question("For graph 2 which main effects appear to be produced entirely by the interaction?",
+    learnr::answer("Main Effect of A"),
+    learnr::answer("Main Effect of B"),
+    learnr::answer("Both main effects"),
+    learnr::answer("Neither main effect",correct = TRUE),  
+    correct = "Correct! A2 is consistently larger than A1 and B2 is consistently larger than B1",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+),
+ learnr::question("For graph 3 which main effects appear to be produced entirely by the interaction?",
+    learnr::answer("Main Effect of A"),
+    learnr::answer("Main Effect of B",correct = TRUE),
+    learnr::answer("Both main effects"),
+    learnr::answer("Neither main effecct"),  
+    correct = "Correct! A2 is always lower than A1 but B2 is only lower than B1 because of the interaction" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+
+``` 
+
+## Video 5: Factorial ANOVA in R 
+![](https://youtu.be/0BzC5lOOoDk)
+
+## Factorial ANOVA in R
+
+Factorial ANOVA in R looks a lot like one factor ANOVA, but there is some extra code to get the correct sums of squares. There are numerous types of SS and ways to conduct ANOVA but only one type that is relevant to situations when we test interactions 
+
+```{r}
+A<-c("A1","A1","A1","A1","A2","A2","A2","A2")
+B<-c("B1","B2","B1","B2","B1","B2","B1","B2")
+x<-c(2,4,4,6,8,10,12,14)
+xx<-as.data.frame(cbind(A,B,x))
+xx$A<-as.factor(xx$A)
+xx$B<-as.factor(xx$B)
+xx$x<-as.numeric(xx$x)
+knitr::kable(xx)
+```
+
+The first line of code sets the correct contrast. 
+
+options(contrasts=c("contr.helmert", "contr.poly"))
+
+The second conducts the ANOVA, writing it to an object (anova2F).
+
+anova2F<-lm(Testosterone~Region+Condition+Region:Condition, data=culture)
+
+The third line uses the `car` package to produce the correct sums of squares. 
+
+car::Anova(anova2F, type = 3)
+
+
+
+```{r}
+options(contrasts=c("contr.helmert", "contr.poly"))
+anova2F<-lm(x~A*B, data=xx)
+car::Anova(anova2F, type = 3)
+
+```
+
+The final line produces the effect size using `lsr`.
+
+lsr::EtaSquared(anova2F)
+```{r}
+lsr::etaSquared(anova2F)
+```
+
+## Exercise 
+
+Using the *denial2* data, predict Anti-Egalitarian Preferences (**EXCL_ANTIEG**) from **Education** and **Gender**.
+
+```{r ex2, exercise = TRUE, exercise.lines = 4}
+
+```
+
+```{r ex2-solution}
+options(contrasts=c("contr.helmert", "contr.poly"))
+ex2<-lm(EXCL_ANTIEG~Education*Gender, data=denial2)
+car::Anova(ex2, type = 3)
+lsr::etaSquared(ex2)
+```
+
+## Graphing with `ggplot2`
+
+Before we interpret our effects, it is useful to view them graphically. We will use R's most popular graphing package `ggplot2`to accomplish this. The code for `ggplot2` may seem complicated at first, but you can easily adapt it to new problems. 
+
+The first line creates our graphing object. xx represents our data file. aes stands for "aestetics" - this is what will be represented on the x and y axis. x is = one factor, y = outcome variable, fill = the other factor. Generally, fill should be the factor with the fewest levels (not an issue here as they both have two). The second line just defines what we are graphing and does not need to be modified is only needed for the tutorial to make stuff fit on screen)
+
+bars <- ggplot(xx, aes(x=A, y=x, fill=B))
+bars + stat_summary(fun = mean, geom="bar", position="dodge")
+
+```{r}
+bars <- ggplot(xx, aes(x=A, y=x, fill=B))
+bars + stat_summary(fun = mean, geom="bar", position="dodge")
+```
+
+### Exercise
+
+Adapt the `ggplot2` code to make a graph for your analysis. 
+
+```{r ex3, exercise = TRUE, exercise.lines = 4}
+
+```
+
+```{r ex3-solution}
+bars <- ggplot(denial2, aes(x=Education, y=EXCL_ANTIEG, fill=Gender))
+bars + stat_summary(fun = mean, geom="bar", position="dodge")+coord_fixed(ratio = 0.5)
+```
+
+One thing you might notice is that the labels are overlapping on the x-axis. We can add the command below to our code to fix that. 
+
++ theme(axis.text.x = element_text(angle = 45))
+
+give it a shot below
+
+```{r ex4, exercise = TRUE, exercise.lines = 4}
+
+```
+
+```{r ex4-solution}
+bars <- ggplot(denial2, aes(x=Education, y=EXCL_ANTIEG, fill=Gender))
+bars + stat_summary(fun = mean, geom="bar", position="dodge") + theme(axis.text.x = element_text(angle = 45))+coord_fixed(ratio = 0.5)
+```
+
+### Descriptive Statistics
+
+One last useful piece are descriptive statistics. As before the tapply command can deliver those 
+
+```{r}
+tapply(xx$x, list(xx$A,xx$B),mean)
+tapply(xx$x, list(xx$A,xx$B),sd)
+```
+
+Adapt the code above to produce descriptive statistics for your analyses.
+
+```{r ex5, exercise = TRUE, exercise.lines = 2}
+
+```
+
+```{r ex5-solution}
+tapply(denial2$EXCL_ANTIEG,list(denial2$Gender,denial2$Education),mean)
+tapply(denial2$EXCL_ANTIEG,list(denial2$Gender,denial2$Education),sd)
+```
+
+## Quiz
+
+```{r}
+options(contrasts=c("contr.helmert", "contr.poly"))
+ex2<-lm(EXCL_ANTIEG~Education*Gender, data=denial2)
+car::Anova(ex2, type = 3)
+lsr::etaSquared(ex2)
+bars <- ggplot(denial2, aes(x=Education, y=EXCL_ANTIEG, fill=Gender))
+bars + stat_summary(fun = mean, geom="bar", position="dodge") + theme(axis.text.x = element_text(angle = 45))+coord_fixed(ratio = 0.5)
+tapply(denial2$EXCL_ANTIEG,list(denial2$Gender,denial2$Education),mean)
+tapply(denial2$EXCL_ANTIEG,list(denial2$Gender,denial2$Education),sd)
+```
+
+
+
+```{r quiz5, ECHO=F}
+learnr::quiz(
+ learnr::question("What variables produced statisitcally significant effects?",
+    learnr::answer("Both main effects"),
+    learnr::answer("The interaction"),
+    learnr::answer("None of 'em"),
+    learnr::answer("All of them",correct=TRUE),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+ learnr::question("Which of the following best describes the main effect of gender of anti-egalitarian beliefs?",
+    learnr::answer("There was not difference between men and women"),
+    learnr::answer("Women more strongly endorsed anti-egalitarian beliefs"),
+    learnr::answer("Men more strongly endorsed anti-egalitarian beliefs",correct=TRUE),
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+),
+ learnr::question("Which of the following best describes the main effect of education of anti-egalitarian beliefs?",
+    learnr::answer("There was not difference between education levels"),
+    learnr::answer("The most highly educated endorsed anti-egalitarian beliefs most strongly"),
+    learnr::answer("Broadly, more education related to less strongly endorsed anti-egalitarian beliefs",correct=TRUE),
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+ learnr::question("Which of the following best describes the interaction effect?",
+    learnr::answer("There was not an interaction"),
+    learnr::answer("Men endorsed more anti-egalitarian beliefs"),
+    learnr::answer("Men endorsed more anti-egalitarian beliefs at all education levels except Ph.D.",correct=TRUE),
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+
+``` 
+
+
+## Video 6: Examples from the Literature
+
+![](https://youtu.be/SAEvY1Jlm58)
+
+## APA Style Write-up
+
+In this section we will review how to present findings in APA style. 
+
+```{r}
+options(contrasts=c("contr.helmert", "contr.poly"))
+ex2<-lm(EXCL_ANTIEG~Education*Gender, data=denial2)
+car::Anova(ex2, type = 3)
+lsr::etaSquared(ex2)
+tapply(denial2$EXCL_ANTIEG,list(denial2$Gender,denial2$Education),mean)
+tapply(denial2$EXCL_ANTIEG,list(denial2$Gender,denial2$Education),sd)
+tapply(denial2$EXCL_ANTIEG,denial2$Gender,mean)
+tapply(denial2$EXCL_ANTIEG,denial2$Gender,sd)
+tapply(denial2$EXCL_ANTIEG,denial2$Education,mean)
+tapply(denial2$EXCL_ANTIEG,denial2$Education,sd)
+```
+
+```{r}
+tapply(denial2$EXCL_ANTIEG,denial2$Education,mean)
+tapply(denial2$EXCL_ANTIEG,denial2$Education,sd)
+```
+
+
+A 5x2 between subjects ANOVA examined the relationship between education and gender on anti-egalitarian beliefs. Men (*M* = 1.93, *S* = 0.83) were more likely to endorse anti-egalitarian beliefs than women (*M* = 1.54, *S* = 0.62), *F*(1,1540)=17.06, *p*<.001, partial $\eta^2$ = .066. Education tended to reduce anti-egalitarian beliefs, *F*(4,1540)=4.34,*p*=.002, partial $\eta^2$ = .010. Those without a high school education (*M*=1.75, *S*=.069) and three years after high school (*M*=1.72, *S*=.069) produced similar means. Those with less than four years after high school (*M*=1.61, *S*=.069), and four or more years after high school (*M*=1.60, *S*=.065) indicated lessened endorsement whereas those with doctoral degrees,(*M*=1.44, *S*=.042) indicated the least endorsement of anti-egalitarian beliefs. 
+
+These findings are qualified by a significant interaction wherein men at all levels of education, except the doctoral level, endorsed greater anti egalitarian beliefs, *F*(1,1540)=3.36, *p*=.010, partial $\eta^2$ = .009. (Note: I would likely add a table here with the means or present the graph as well)
+
+## Video 7: Revisiting Correlation and Regression
+
+![](https://youtu.be/ezLh-LYYvWk)
+
+## Correlation/Regression Quiz
+
+Recall these analyses from earlier in the semester. 
+
+```{r}
+cor.test(BLM$NegCon,BLM$blm)
+summary(lm(PSEUDOSCI~ANTIESTABL+TRADVALUE+OPENNESS+AGREEABL,data=denial))
+```
+
+## Quiz 
+
+```{r quiz6, ECHO=F}
+learnr::quiz(
+ learnr::question("What is the null hypothesis for the correlation?",
+    learnr::answer(sprintf("$H_0:\\mu_1-\\mu2=0$")),
+    learnr::answer(sprintf("$\\Beta=0$")),
+    learnr::answer(sprintf("$\\rho^2=0$")),
+    learnr::answer(sprintf("$\\rho=0$"),correct=TRUE),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("What is the null hypothesis for the R squared value?",
+    learnr::answer(sprintf("$H_0:\\mu_1-\\mu2=0$")),
+    learnr::answer(sprintf("$\\Beta=0$")),
+    learnr::answer(sprintf("$\\rho^2=0$"),correct=TRUE),
+    learnr::answer(sprintf("$\\rho=0$")),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("What is the null hypothesis for slopes (regression coefficients)?",
+    learnr::answer(sprintf("$H_0:\\mu_1-\\mu2=0$")),
+    learnr::answer(sprintf("$\\Beta=0$"),correct=TRUE),
+    learnr::answer(sprintf("$\\rho^2=0$")),
+    learnr::answer(sprintf("$\\rho=0$")),  
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+ learnr::question("Select the best interpretation of the correlation between Negative Contact and support for Black Lives Matter?",
+    learnr::answer("Negative contact related to less support for BLM"),
+    learnr::answer("Negative contact related to more support for BLM"),
+    learnr::answer("Negative contact was unrelated to support for BLM",correct=TRUE),
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+),
+ learnr::question("What is the best interpretation of the R Square value for the multiple regression",
+    learnr::answer("All of the variables were related to greater psuedoscience beliefs"),
+    learnr::answer("Some of the variables were related to psuedoscience beliefs"),
+    learnr::answer("None of the variables were related to psuedoscience beliefs"),
+    learnr::answer("Our set of variables was significantly related to psuedoscience beliefs",correct=TRUE),
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+ learnr::question("Which of the following is the best interpretation of the regression coefficients?",
+    learnr::answer("All of the coefficients [slopes] related to psuedoscience beliefs"),
+    learnr::answer("Some of the coefficients [slopes] related to psuedoscience beliefs"),
+    learnr::answer("None of the coefficients [slopes] related to psuedoscience beliefs"),
+    learnr::answer("All of the variables, except openess related to greater endorsement of psuedoscience beliefs",correct=TRUE),
+    correct = "Correct!" ,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+
+```
+
+
+##
+Congratulations! You've reached the end of the tutorial. Here is what you need to do to obtain credit. Take the completion token below and copy it. Open Canvas as go to the assignment called ANOVA 1 Factor tutorial. Enter your token!
+
+
+```{r echo=F}
+stringi::stri_rand_strings(1, 5, pattern = "[A-Za-z0-9]")
+```
+
