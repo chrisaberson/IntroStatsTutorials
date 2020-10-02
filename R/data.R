@@ -64,7 +64,7 @@
 #'   \item{postBDI}{Post-test depression}
 #' }
 
-"condom"
+"yoga"
 
 #' Inducing Hypocrisy
 #'
@@ -73,7 +73,7 @@
 #' @format A data frame with 16 rows and 2 variables:
 #' \describe{
 #'   \item{CONDITIO}{Condition}
-#'   \item{CONDOM}{Condoms purchased}
+#'   \item{CONDOMS}{Condoms purchased}
 #' }
 
 "condom"
