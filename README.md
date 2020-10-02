@@ -15,8 +15,8 @@ To run a tutorial, use this code.
     run_tutorial("regression", package = "IntroStatsTutorials")
     run_tutorial("NHST", package = "IntroStatsTutorials")
     run_tutorial("ttest", package = "IntroStatsTutorials")
-    run_tutorial("ANOVA 1F", package = "IntroStatsTutorials")
-
+    run_tutorial("ANOVA1F", package = "IntroStatsTutorials")
+    run_tutorial("ANOVA2F", package = "IntroStatsTutorials")
 
 After you run this code, the tutorial will open in a tab on your
 browser.
