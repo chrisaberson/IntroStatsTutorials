@@ -1,0 +1,393 @@
+---
+title: "Chi square and choosing the correct test"
+output: learnr::tutorial
+runtime: shiny_prerendered
+description: >
+  Chi square and choosing the correct test
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(learnr)
+library(knitr)
+library(IntroStatsTutorials)
+
+```
+
+# Chi Square
+
+## Overview
+
+This tutorial focuses on the chi square tests for hypotheses regarding categorical variables. It also covers strategies for selecting the correct statistical test. 
+
+The PowerPoint slides for the presentation in the videos are on Canvas if you want a copy.
+
+The videos (as well as others) can also be found on my YouTube channel https://www.youtube.com/channel/UC5kDZTyHZlgSgSEa3YQXOig 
+
+### Learning Objectives
+
+Learning Objectives:
+
+Calculate the Chi-square statistic
+
+Use Chi square to test hypotheses
+
+Distinguish between Goodness of Fit and Independence Chi Square tests
+
+Use R to calculate Chi square
+
+Use R to calculate effect sizes for Chi Square
+
+Identify the steps required to select the correct statistical test
+
+Given a research design, select the most appropriate statistical test
+
+## Packages 
+
+This tutorial uses the following packages:
+
+* `learnr` and `shiny` and `rmarkdown` for aspects of the tutorial
+
+* `lsr` for effect sizes
+
+## Video 1 Introduction to Chi Square
+
+![Video 1: Introduction](https://youtu.be/KcufEPiJpss)
+
+## Quiz 1 
+
+```{r quiz1}
+learnr::quiz(
+  learnr::question("Chi-square tests address",
+    learnr::answer("Categorical variables", correct = TRUE),
+    learnr::answer("Interval/Ratio variables"),
+    learnr::answer("One categorical and one interval/ratio variable"),
+    learnr::answer("None of the above"),
+    correct = "Correct! ",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("The correct Chi square test for a situation with a single categorical variable is",
+    learnr::answer("Goodness of Fit", correct = TRUE),
+    learnr::answer("Independence"),
+    learnr::answer("General Chi square"),
+    learnr::answer("None of the above"),
+    correct = "Correct.",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  ),
+  learnr::question("The correct Chi square test for a situation with two categorical variables is",
+    learnr::answer("Goodness of Fit"),
+    learnr::answer("Independence", correct = TRUE),
+    learnr::answer("General Chi square"),
+    learnr::answer("None of the above"),
+    correct = "Correct.",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  )
+)
+
+``` 
+
+## Video 2 Chi square Goodness of Fit
+
+![](https://youtu.be/fxvRZyDVIUk)
+
+## Exercise Calculating Goodness of Fit
+
+$\huge \chi^2 = \Sigma\frac{(f_0-f_e)^2}{f_e}$
+
+Image you have a variable where you expect the number of yes responses to equal the number of no responses. With 100 responses, you end up with 60 yes and 40 no. Is this difference enough for you to question your assumption? 
+
+```{r quiz2, ECHO=F}
+learnr::quiz(
+  learnr::question("What is the null hypothesis",
+    learnr::answer(sprintf("$H_0:f_{yes}=f_{no}$"), correct = TRUE),
+    learnr::answer(sprintf("$H_0:f_{yes}\\ne f_{no}$")),
+    learnr::answer(sprintf("$H_0:\\mu_1-\\mu2=0$")),
+    learnr::answer(sprintf("$H_0:$ The events are independent")),
+    correct = "Correct! ",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("What is the expected frequency for each category?",
+    learnr::answer("50,50", correct = TRUE),
+    learnr::answer("40,60"),
+    learnr::answer("60,40"),
+    learnr::answer("None of the above"),
+    correct = "Correct. ",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  ),
+  learnr::question("What is the chi-square value?",
+    learnr::answer("4", correct = TRUE),
+    learnr::answer("40"),
+    learnr::answer("0"),
+    learnr::answer("None of the above"),
+    correct = "Correct.",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  )
+)
+
+``` 
+
+## Video 3 Test for Independence 
+
+![](https://youtu.be/J__yC3nAyR0)
+
+## Exercise: Calculating the test for independence
+
+$\huge \chi^2 = \Sigma\frac{(f_0-f_e)^2}{f_e}$
+
+
+|        | Biden | Trump |
+|--------|-------|-------|
+| Male   | 51    | 49    |
+| Female | 64    | 36    |   
+|        |       |       |   
+
+Two hundred randomly selected voters indicated their preferences in the upcoming election. Is candidate choice independent of gender? 
+```{r quiz4}
+learnr::quiz(
+  learnr::question("What is the null hypothesis",
+    learnr::answer(sprintf("$H_0:f_{yes}=f_{no}$")),
+    learnr::answer(sprintf("$H_0:f_{yes}\\ne f_{no}$")),
+    learnr::answer(sprintf("$H_0:\\mu_1-\\mu2=0$")),
+    learnr::answer(sprintf("$H_0:$ The events rae independent"), correct = TRUE),
+    correct = "Correct! ",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("What is the expected frequency for Biden vs. Trump for women?",
+    learnr::answer("50,50", correct = TRUE),
+    learnr::answer("40,60"),
+    learnr::answer("60,40"),
+    learnr::answer("None of the above"),
+    correct = "Correct. $",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  ),
+  learnr::question("What is the chi-square value?",
+    learnr::answer("7.9", correct = TRUE),
+    learnr::answer("40"),
+    learnr::answer("0"),
+    learnr::answer("None of the above"),
+    correct = "Correct.",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  )
+)
+```
+
+## Video 4 Examples from the literature
+
+![](https://youtu.be/bQRbWWvAIkE)
+
+## Exercise Chi Square with R
+
+To run a chi-square test for independent in R, we first create an object that captures the distribution of scores (the table command). Next, use the chisq.test command to get the values. 
+
+
+```{r echo=TRUE}
+xx<-table(rental$HIV,rental$Available)
+chisq.test(xx, correct = FALSE)
+```
+We also want additional useful information. I like proportions but you need to be careful in asking what proportions you want. The prop.table command listed below gives row proportions. To me this makes the most sense as it indicates what percent in each row (HIV, No HIV) received the different responses. 
+
+```{r echo=TRUE}
+prop.table(xx,1)
+```
+
+The last piece of code we need produces the Cramer's V (sometimes called $\phi$ values).
+
+```{r echo=TRUE}
+lsr::cramersV(xx)
+```
+
+
+Using the GSSsub Subset data, test whether attitudes toward marijuana legalization are independent of sex (the marijuana variable is called grass). Be sure to get a table of proportions and an effect size. Keep in mind these result are from a national survey taken in the 90s.
+
+```{r ex1, exercise = TRUE, exercise.lines = 4}
+
+```
+
+```{r ex1-solution}
+xx<-table(GSSsub$sex,GSSsub$grass)
+chisq.test(xx, correct = FALSE)
+prop.table(xx,1)
+lsr::cramersV(xx)
+```
+
+
+## Quiz
+```{r }
+xx<-table(GSSsub$sex,GSSsub$grass)
+chisq.test(xx, correct = FALSE)
+prop.table(xx,1)
+lsr::cramersV(xx)
+```
+
+
+```{r quiz6, ECHO=F}
+learnr::quiz(
+  learnr::question("What is the null hypothesis for this test?",
+    learnr::answer("Sex and legalization views are independent", correct = TRUE),
+    learnr::answer("Sex and legalization views are not independent"),
+    learnr::answer("Men and women have the same mean legalization values"),
+    learnr::answer("All categories are equally distributed"),
+    correct = "Correct! ",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("What is your conclusion about the null hypothsis?" ,
+    learnr::answer("Reject H0", correct = TRUE),
+    learnr::answer("Fail to reject H0"),
+    learnr::answer("Accept H0"),
+    learnr::answer("Fail to accept H0"),
+    correct = "Correct. ",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  ),
+  learnr::question("What is the best plain English conclusion?" ,
+    learnr::answer("Men demonstrate more support for legalization than do women", correct = TRUE),
+    learnr::answer("Reject H0"),
+    learnr::answer("Men demonstrate less support for legalization than do women"),
+    learnr::answer("Men and women demonstrate similar levels of support for legalization."),
+    correct = "Correct. ",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  )
+)
+
+``` 
+
+## Video 5 Choosing the Correct Statistical Test
+
+![](https://youtu.be/bF2cRAiH9lg)
+
+## Quiz
+
+This one is pretty long. You can expect a good bit of this on the final exam. 
+
+```{r quiz5, ECHO=F}
+learnr::quiz(
+  learnr::question("Imagine you are a researcher interested student's attitudes toward gay men. Specifically, you want to test the idea that women are more accepting of gay men and thus have more positive attitudes toward gay men than do men. You collect data from 10 heterosexual men and 10 heterosexual women using a scale that measures homophobia (1 to 20-point scale, higher scores indicate more homophobia).",
+    learnr::answer("Independent Samples t-test", correct = TRUE),
+    learnr::answer("Paired t-test"),
+    learnr::answer("Chi square test for independence"),
+    learnr::answer("One sample t"),
+    correct = "Correct! Two variables. One continuous, one categorical = Independent Samples t. You could also have used One Factor ANOVA",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("A psychologist is interested in the impact of instruction type (on-line vs. in-class) and study time (less than 5 hours per week vs. 5 to 10 hours per week vs. 10 or more hours per week) on scores on a final exam (0 to 100). " ,
+    learnr::answer("Independent Sample t-test"),
+    learnr::answer("Factorial ANOVA", correct = TRUE),
+    learnr::answer("Chi square test for independence"),
+    learnr::answer("One Factor ANOVA"),
+    correct = "Correct. Three variables. Two are factors and one is continuous.",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  ),
+  learnr::question("A psychologist investigated the relationship between SAT score and academic success (GPA). She determined that students with high SAT scores were more likely to experience academic success. What test was she most likely to have used?" ,
+    learnr::answer("Correlation", correct = TRUE),
+    learnr::answer("Multiple Regression"),
+    learnr::answer("Chi square test for independence"),
+    learnr::answer("One Factor ANOVA"),
+    correct = "Correct. Two continuous variables. Simple regression would work here as well but it would be pointless",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  ),
+  learnr::question("A large university wants to compare the mathematical abilities of its male and female students. A researcher selects 100 men and 100 women at random from each of the four classes, and administers a math test. The men average 500 on the test, with a standard deviation of 120. The women average 450 on the test, with a standard deviation of 110. What test would be appropriate to determine whether the difference between men and women is real or due to chance variation " ,
+    learnr::answer("Independent Sample t-test", correct = TRUE),
+    learnr::answer("Factorial ANOVA"),
+    learnr::answer("Chi square test for independence"),
+    learnr::answer("Multiple regression"),
+    correct = "Correct. Two variables. One is dichotomous, the other continuous.",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  ),
+  
+learnr::question("Another university is interested in predicting 1st year college GPA from a) HS GPA, b) SAT Score, and c) Quality of letters of recommendation." ,
+    learnr::answer("Correlation"),
+    learnr::answer("Multiple Regression", correct = TRUE),
+    learnr::answer("Chi square test for independence"),
+    learnr::answer("One Factor ANOVA"),
+    correct = "Correct. Predicting one continuous variable from three continuous variables.",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  ),  
+  
+  learnr::question("A psychologist is interested in the relationship between job satisfaction and stress. Within a large corporation, the psychologist asked a random sample of workers 2 questions. The first question asked how satisfied workers were with their job and had them rate their satisfaction on a scale from 1 to 50. The second question asked how stressful they found their job in a given week. Again the workers rated their stress level on a scale from 1 to 50. What type of statistical test best assesses the relationship between job satisfaction and level of stress??" ,
+    learnr::answer("Correlation", correct = TRUE),
+    learnr::answer("Multiple Regression"),
+    learnr::answer("Chi square test for independence"),
+    learnr::answer("One Factor ANOVA"),
+    correct = "Correct. Two continuous variables. Simple regression would work here as well but it would be pointless",
+    random_answer_order = TRUE,
+    incorrect = "Sorry, that is incorrect. Try again.",
+    allow_retry = T
+  ),
+  learnr::question("A psychologist is interested in attitudes towards the disabled. She believes that contact with someone who is disabled might have an effect on peoples' attitudes. To test her hypothesis, she measured attitudes toward the disabled both before and after contact with an individual in a wheelchair. What type of statistical test should she use to determine if contact with a disabled person changes peoples' attitudes toward the disabled?",
+    learnr::answer("Independent Samples t-test"),
+    learnr::answer("Paired t-test", correct = TRUE),
+    learnr::answer("Chi square test for independence"),
+    learnr::answer("One sample t"),
+    correct = "Correct! Two variables. Two continuous variables measured at different time points",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("A psychologist is interested in conducting a study of grand juries in L.A. County to see how they compare with the demographics of potential jurors in the population. She wants to see if jury panels are really representative of the population. The first variable she examines is age. The percentage of people over 65 in the population of potential jurors is 25%, but the number of people aged 65 or more who were involved in grand jury trials was 38%. She wants to know if the difference between people over 65 on juries is significantly different than that of the population. What test should she use?",
+    learnr::answer("Independent Samples t-test"),
+    learnr::answer("Chi square goodness of fit", correct = TRUE),
+    learnr::answer("Chi square test for independence"),
+    learnr::answer("One sample t"),
+    correct = "Correct! One categorical variable compared to hypothesized values.",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  ),
+  learnr::question("A psychologist is interested in whether or not handedness is related to biological sex. Specifically he wants to know if the percentage right-handed men in the population is different from the percentage of right-handed women. What type of statistical test would be appropriate?",
+    learnr::answer("Independent Samples t-test"),
+    learnr::answer("Chi square goodness of fit"),
+    learnr::answer("Chi square test for independence", correct = TRUE),
+    learnr::answer("One sample t"),
+    correct = "Correct! Two categorical variables addressing whether they are related.",
+    incorrect = "Sorry, that is incorrect. Try again.",
+    random_answer_order = TRUE,
+    allow_retry = T
+  )
+)
+
+``` 
+
+
+## 
+
+Congratulations! You've reached the end of the tutorial. Here is what you need to do to obtain credit. Take the completion token below and copy it. Open Canvas and go to the assignment called Chi Square and Probability tutorial. Enter your token!
+
+
+```{r echo=F}
+stringi::stri_rand_strings(1, 5, pattern = "[A-Za-z0-9]")
+```
+
