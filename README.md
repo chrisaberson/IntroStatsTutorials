@@ -17,6 +17,7 @@ To run a tutorial, use this code.
     run_tutorial("ttest", package = "IntroStatsTutorials")
     run_tutorial("ANOVA1F", package = "IntroStatsTutorials")
     run_tutorial("ANOVA2F", package = "IntroStatsTutorials")
+    run_tutorial("ChiSquare", package = "IntroStatsTutorials")
 
 After you run this code, the tutorial will open in a tab on your
 browser.
