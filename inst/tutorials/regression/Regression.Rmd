@@ -615,9 +615,6 @@ summary(lm(y~x1+x2,data=mr))
 
 We'll discuss different statistics and their interpretation as we move forward but for now, just note under "estimate" we see our intercept (0.5), $b_{y1}$=0.90, and $b_{y2}$=0.20. Both of the slopes are positive, meaning that as each rises, we expect y to rise as well. 
 
-```{r}
-load(file="G:/My Drive/IntroStatsTutorials/data/denial.RData")
-```
 
 Next, we are going to examine some real data, using the *denial* dataset. The code below runs a multiple regression predicting climate change denial from anti-establishment beliefs, traditional values, openness, and agreeableness. Note that to add additional predictors, we simply need to add them to a the string following the ~ symbol. 
 
